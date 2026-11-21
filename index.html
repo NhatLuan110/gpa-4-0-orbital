@@ -1,0 +1,1985 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#050814" />
+  <title>GPA 4.0 // ORBITAL STUDY OS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            display: ['Space Grotesk', 'Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace']
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    * { box-sizing: border-box; }
+
+    /* Theme Surface Variables (Full Standalone Production) */
+    html[data-theme="dark"] {
+      --bg: #050814;
+      --surface: #0b1124;
+      --surface-2: #101830;
+      --fg: #f1f5f9;
+      --muted: #94a3b8;
+      --border: rgba(148, 163, 184, 0.16);
+      --border-soft: rgba(148, 163, 184, 0.10);
+      --glass-shadow: rgba(2, 6, 23, 0.72);
+      --orb-op: 0.45;
+    }
+    html[data-theme="light"] {
+      --bg: #f4f7ff;
+      --surface: #ffffff;
+      --surface-2: #f1f5fb;
+      --fg: #0f172a;
+      --muted: #475569;
+      --border: rgba(15, 23, 42, 0.12);
+      --border-soft: rgba(15, 23, 42, 0.08);
+      --glass-shadow: rgba(15, 23, 42, 0.09);
+      --orb-op: 0.25;
+    }
+
+    /* 3 Futuristic Gradient Presets */
+    body[data-grad="aurora"] {
+      --g1: #06b6d4;
+      --g2: #6366f1;
+      --g3: #a855f7;
+      --g4: #ec4899;
+      --g-ok1: #10b981;
+      --g-ok2: #06b6d4;
+      --g-hot1: #f43f5e;
+      --g-hot2: #f97316;
+    }
+    body[data-grad="plasma"] {
+      --g1: #f59e0b;
+      --g2: #f43f5e;
+      --g3: #d946ef;
+      --g4: #8b5cf6;
+      --g-ok1: #10b981;
+      --g-ok2: #34d399;
+      --g-hot1: #ef4444;
+      --g-hot2: #f59e0b;
+    }
+    body[data-grad="quantum"] {
+      --g1: #10b981;
+      --g2: #06b6d4;
+      --g3: #3b82f6;
+      --g4: #6366f1;
+      --g-ok1: #22c55e;
+      --g-ok2: #06b6d4;
+      --g-hot1: #f43f5e;
+      --g-hot2: #ec4899;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--fg);
+      font-family: 'Inter', system-ui, sans-serif;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* Cyber Coordinate Grid & Drifting Aurora Orbs */
+    .cyber-grid {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background-image:
+        linear-gradient(to right, color-mix(in srgb, var(--g2) 9%, transparent) 1px, transparent 1px),
+        linear-gradient(to bottom, color-mix(in srgb, var(--g1) 9%, transparent) 1px, transparent 1px);
+      background-size: 44px 44px;
+      mask-image: radial-gradient(ellipse 92% 78% at 50% 8%, black 22%, transparent 100%);
+    }
+
+    .orb {
+      position: fixed;
+      border-radius: 9999px;
+      pointer-events: none;
+      z-index: 0;
+      filter: blur(95px);
+      opacity: var(--orb-op);
+      transition: background 0.6s ease;
+    }
+    .orb-1 {
+      top: -160px; right: -90px; width: 560px; height: 560px;
+      background: radial-gradient(circle at 35% 35%, var(--g1), var(--g2) 50%, transparent 72%);
+      animation: driftA 13s ease-in-out infinite alternate;
+    }
+    .orb-2 {
+      bottom: -180px; left: -120px; width: 560px; height: 560px;
+      background: radial-gradient(circle at 60% 60%, var(--g4), var(--g3) 48%, transparent 72%);
+      animation: driftB 16s ease-in-out infinite alternate;
+    }
+    .orb-3 {
+      top: 36%; left: 42%; width: 420px; height: 420px;
+      opacity: calc(var(--orb-op) * 0.55);
+      background: radial-gradient(circle, var(--g3), var(--g1) 55%, transparent 75%);
+      animation: driftA 20s ease-in-out infinite alternate-reverse;
+    }
+    @keyframes driftA {
+      0%   { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(-40px, 32px) scale(1.1); }
+    }
+    @keyframes driftB {
+      0%   { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(36px, -28px) scale(1.08); }
+    }
+    @keyframes gradFlow {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Animated Holographic Top Hairline */
+    .holo-bar { position: relative; overflow: hidden; }
+    .holo-bar::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--g1), var(--g2), var(--g3), var(--g4), var(--g1));
+      background-size: 240% 100%;
+      animation: gradFlow 5.5s linear infinite;
+    }
+
+    /* Glass Panels & Cards */
+    .glass-panel {
+      background: linear-gradient(
+        145deg,
+        color-mix(in srgb, var(--surface) 82%, var(--g2) 6%),
+        color-mix(in srgb, var(--surface) 80%, var(--g3) 5%)
+      );
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+      border: 1px solid color-mix(in srgb, var(--g2) 26%, var(--border));
+      box-shadow:
+        0 18px 46px -22px var(--glass-shadow),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+
+    .glass-card {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(
+        160deg,
+        color-mix(in srgb, var(--surface) 88%, var(--g1) 4%),
+        color-mix(in srgb, var(--surface) 86%, var(--g3) 4%)
+      );
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid color-mix(in srgb, var(--g2) 20%, var(--border));
+      transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+                  border-color 0.24s ease,
+                  box-shadow 0.24s ease;
+    }
+    .glass-card:hover {
+      transform: translateY(-3px);
+      border-color: color-mix(in srgb, var(--g1) 65%, var(--g3));
+      box-shadow:
+        0 18px 40px -18px color-mix(in srgb, var(--g2) 48%, transparent),
+        0 0 0 1px color-mix(in srgb, var(--g1) 24%, transparent);
+    }
+
+    .glass-sub {
+      background: color-mix(in srgb, var(--surface-2) 82%, transparent);
+      border: 1px solid var(--border-soft);
+    }
+
+    .hero-grad-text {
+      background: linear-gradient(100deg, var(--g1) 0%, var(--g2) 34%, var(--g3) 68%, var(--g4) 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: gradFlow 6.5s ease infinite;
+    }
+
+    .grad-btn {
+      background: linear-gradient(135deg, var(--g1), var(--g2) 52%, var(--g3));
+      background-size: 165% 165%;
+      color: #ffffff;
+      border: none;
+      box-shadow: 0 8px 24px -6px color-mix(in srgb, var(--g2) 68%, transparent);
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background-position 0.3s ease;
+    }
+    .grad-btn:hover {
+      background-position: 100% 50%;
+      transform: translateY(-1px);
+      box-shadow: 0 12px 28px -6px color-mix(in srgb, var(--g3) 75%, transparent);
+    }
+
+    .grad-hot {
+      background: linear-gradient(135deg, var(--g-hot1), var(--g-hot2));
+      color: #ffffff;
+      box-shadow: 0 4px 16px -4px color-mix(in srgb, var(--g-hot1) 70%, transparent);
+    }
+    .grad-ok {
+      background: linear-gradient(135deg, var(--g-ok1), var(--g-ok2));
+      color: #ffffff;
+    }
+    .grad-pareto {
+      background: linear-gradient(135deg, #f59e0b, #ec4899);
+      color: #ffffff;
+    }
+
+    .chip-active {
+      background: linear-gradient(135deg, color-mix(in srgb, var(--g1) 24%, transparent), color-mix(in srgb, var(--g3) 24%, transparent));
+      border-color: var(--g2) !important;
+      color: var(--fg) !important;
+      box-shadow: 0 0 16px -4px color-mix(in srgb, var(--g2) 48%, transparent);
+    }
+
+    /* Animated Neo Checkboxes */
+    .neo-check {
+      width: 21px;
+      height: 21px;
+      border-radius: 7px;
+      border: 1.5px solid color-mix(in srgb, var(--g2) 52%, var(--muted));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+      background: color-mix(in srgb, var(--bg) 55%, transparent);
+    }
+    .neo-check.checked {
+      background: linear-gradient(135deg, var(--g1), var(--g2), var(--g3));
+      border-color: transparent;
+      color: #ffffff;
+      box-shadow: 0 0 14px color-mix(in srgb, var(--g2) 70%, transparent);
+      transform: scale(1.06);
+    }
+    .neo-check.exam-check.checked {
+      background: linear-gradient(135deg, var(--g-ok1), var(--g-ok2));
+      border-color: transparent;
+      box-shadow: 0 0 14px color-mix(in srgb, var(--g-ok1) 70%, transparent);
+    }
+
+    .session-row { transition: all 0.2s ease; }
+    .session-row:hover {
+      border-color: color-mix(in srgb, var(--g1) 58%, var(--g3));
+      background: linear-gradient(135deg, color-mix(in srgb, var(--g1) 9%, var(--surface-2)), color-mix(in srgb, var(--g3) 9%, var(--surface-2)));
+    }
+    .session-row.is-done { opacity: 0.54; }
+    .session-row.is-done .session-text { text-decoration: line-through; }
+
+    .exam-card-glow {
+      border-color: color-mix(in srgb, var(--g-hot1) 70%, transparent) !important;
+      background: linear-gradient(
+        155deg,
+        color-mix(in srgb, var(--surface) 84%, var(--g-hot1) 12%),
+        color-mix(in srgb, var(--surface) 86%, var(--g4) 9%)
+      ) !important;
+      box-shadow: 0 12px 34px -12px color-mix(in srgb, var(--g-hot1) 48%, transparent);
+    }
+    .day-done-glow {
+      border-color: color-mix(in srgb, var(--g-ok1) 65%, transparent) !important;
+      box-shadow: 0 10px 28px -14px color-mix(in srgb, var(--g-ok1) 45%, transparent);
+    }
+
+    /* Beacon Pulse */
+    .beacon-dot { position: relative; display: inline-flex; width: 8px; height: 8px; }
+    .beacon-dot::before {
+      content: ''; position: absolute; inset: 0; border-radius: 9999px; background: currentColor;
+      animation: pulseRing 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+    }
+    .beacon-dot::after { content: ''; position: relative; width: 8px; height: 8px; border-radius: 9999px; background: currentColor; }
+    @keyframes pulseRing {
+      0% { transform: scale(1); opacity: 0.85; }
+      75%, 100% { transform: scale(2.6); opacity: 0; }
+    }
+
+    /* Timeline Rail */
+    .timeline-rail { position: relative; }
+    .timeline-rail::before {
+      content: ''; position: absolute; left: 15px; top: 16px; bottom: 16px; width: 3px;
+      background: linear-gradient(180deg, var(--g1), var(--g2), var(--g3), var(--g4));
+      border-radius: 9999px;
+      box-shadow: 0 0 14px color-mix(in srgb, var(--g2) 55%, transparent);
+    }
+
+    .ring-arc {
+      transition: stroke-dashoffset 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+      filter: drop-shadow(0 0 7px color-mix(in srgb, var(--g2) 60%, transparent));
+    }
+
+    .toast-enter { animation: toastSlide 0.28s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+    @keyframes toastSlide {
+      from { opacity: 0; transform: translateY(14px) scale(0.96); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .muted-txt { color: var(--muted); }
+    .custom-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
+    .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, var(--g1), var(--g3));
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body data-grad="aurora" class="antialiased m-0 p-0">
+
+  <!-- SVG Gradient Defs -->
+  <svg width="0" height="0" class="absolute">
+    <defs>
+      <linearGradient id="svgGradPrimary" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="var(--g1)" />
+        <stop offset="50%" stop-color="var(--g2)" />
+        <stop offset="100%" stop-color="var(--g4)" />
+      </linearGradient>
+      <linearGradient id="svgGradOk" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="var(--g-ok1)" />
+        <stop offset="100%" stop-color="var(--g-ok2)" />
+      </linearGradient>
+      <linearGradient id="svgGradPareto" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#f59e0b" />
+        <stop offset="100%" stop-color="#ec4899" />
+      </linearGradient>
+      <linearGradient id="svgGradKTL" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#ec4899"/></linearGradient>
+      <linearGradient id="svgGradTA" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#06b6d4"/><stop offset="100%" stop-color="#2563eb"/></linearGradient>
+      <linearGradient id="svgGradKT" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#ea580c"/></linearGradient>
+      <linearGradient id="svgGradKTCT" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#f43f5e"/><stop offset="100%" stop-color="#be123c"/></linearGradient>
+      <linearGradient id="svgGradMKT" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ec4899"/><stop offset="100%" stop-color="#7c3aed"/></linearGradient>
+      <linearGradient id="svgGradVB" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#14b8a6"/><stop offset="100%" stop-color="#10b981"/></linearGradient>
+      <linearGradient id="svgGradQTH" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#4f46e5"/><stop offset="100%" stop-color="#0ea5e9"/></linearGradient>
+      <linearGradient id="svgGradLVN" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#84cc16"/><stop offset="100%" stop-color="#059669"/></linearGradient>
+    </defs>
+  </svg>
+
+  <!-- Spatial Background -->
+  <div class="cyber-grid"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <canvas id="fxCanvas" class="fixed inset-0 pointer-events-none z-50"></canvas>
+  <div id="toastRoot" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-5 pb-16 space-y-5">
+
+    <!-- HERO COMMAND HUD -->
+    <header class="glass-panel holo-bar rounded-2xl p-5 sm:p-6">
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+
+        <div class="space-y-3.5 flex-1 min-w-0">
+          <!-- Top Bar: Badges + Theme & Gradient Switcher -->
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold tracking-wide text-white"
+                    style="background: linear-gradient(135deg, var(--g1), var(--g2), var(--g3)); box-shadow: 0 4px 16px -4px color-mix(in srgb, var(--g2) 70%, transparent);">
+                <span class="beacon-dot"></span>
+                ORBITAL STUDY OS · 4.0
+              </span>
+              <span class="grad-pareto px-2.5 py-1 rounded-full text-xs font-mono font-bold">⚡ PARETO 20/80</span>
+              <span class="px-2.5 py-1 rounded-full text-xs font-mono glass-sub muted-txt">21/11/2026 → 07/01/2027</span>
+            </div>
+
+            <div class="flex items-center gap-1.5">
+              <div class="flex items-center gap-1 p-1 rounded-full glass-sub">
+                <button data-setgrad="aurora" class="grad-swatch chip-active px-2.5 py-1 rounded-full text-xs font-semibold border border-transparent inline-flex items-center gap-1.5 cursor-pointer transition">
+                  <span class="w-3 h-3 rounded-full" style="background: linear-gradient(135deg, #06b6d4, #6366f1, #ec4899);"></span>Aurora
+                </button>
+                <button data-setgrad="plasma" class="grad-swatch px-2.5 py-1 rounded-full text-xs font-medium border border-transparent inline-flex items-center gap-1.5 muted-txt cursor-pointer transition">
+                  <span class="w-3 h-3 rounded-full" style="background: linear-gradient(135deg, #f59e0b, #f43f5e, #8b5cf6);"></span>Plasma
+                </button>
+                <button data-setgrad="quantum" class="grad-swatch px-2.5 py-1 rounded-full text-xs font-medium border border-transparent inline-flex items-center gap-1.5 muted-txt cursor-pointer transition">
+                  <span class="w-3 h-3 rounded-full" style="background: linear-gradient(135deg, #10b981, #06b6d4, #3b82f6);"></span>Quantum
+                </button>
+              </div>
+              <button id="btnToggleTheme" title="Đổi Dark / Light Mode" class="glass-sub hover:border-[var(--g1)] px-2.5 py-1.5 rounded-full text-xs font-mono font-semibold cursor-pointer transition">
+                ☾ Dark
+              </button>
+            </div>
+          </div>
+
+          <div class="space-y-1.5">
+            <h1 class="font-display text-2xl sm:text-4xl font-bold tracking-tight hero-grad-text leading-tight">
+              Chiến Dịch Chinh Phục GPA 4.0
+            </h1>
+            <p class="text-xs sm:text-sm muted-txt max-w-2xl leading-relaxed">
+              Ôn chuẩn <span class="font-semibold" style="color:var(--fg)">5 giờ/ngày</span> theo nguyên tắc <strong class="hero-grad-text">20/80 Pareto</strong> (đánh trúng 20% kiến thức lõi ăn 80% điểm thi), né tối bận <span class="font-semibold" style="color:var(--g-hot2)">T2–4–6 (20h–22h)</span> và dọn sẵn <span class="font-semibold" style="color:var(--g-hot1)">Tuần Tử Thần 22–25/12</span>.
+            </p>
+          </div>
+
+          <!-- Daily Rhythm -->
+          <div class="flex flex-wrap items-center gap-2 pt-0.5">
+            <div class="glass-sub rounded-xl px-3 py-2 flex items-center gap-2 text-xs" style="border-left: 3px solid var(--g1);">
+              <span class="font-bold font-mono" style="color: var(--g1);">T3·5·7·CN</span>
+              <span class="muted-txt">08:00–10:00 · 15:30–17:00 · 20:30–22:00</span>
+            </div>
+            <div class="glass-sub rounded-xl px-3 py-2 flex items-center gap-2 text-xs" style="border-left: 3px solid var(--g-hot2);">
+              <span class="font-bold font-mono" style="color: var(--g-hot2);">T2·4·6</span>
+              <span class="muted-txt">08:00–10:30 · 15:30–18:00</span>
+              <span class="grad-hot px-2 py-0.5 rounded-md font-mono text-xs font-bold">20h–22h Bận</span>
+            </div>
+          </div>
+
+          <!-- Quick Controls -->
+          <div class="flex flex-wrap items-center gap-2 pt-1">
+            <button id="btnQuickFocus" class="grad-btn px-4 py-2 rounded-xl text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg>
+              Bật Pomodoro 50/10
+            </button>
+            <button id="btnOpenPareto" class="grad-pareto px-3.5 py-2 rounded-xl text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer hover:opacity-95 transition">
+              ⚡ Bản Đồ 20/80 Ăn 80% Điểm
+            </button>
+            <button id="btnExportIcs" class="glass-sub hover:border-[var(--g1)] px-3.5 py-2 rounded-xl text-xs font-semibold inline-flex items-center gap-1.5 cursor-pointer transition">
+              📅 Đồng bộ Lịch (.ics)
+            </button>
+            <button id="btnJumpNextExam" class="glass-sub hover:border-[var(--g-hot1)] px-3.5 py-2 rounded-xl text-xs font-semibold inline-flex items-center gap-1.5 cursor-pointer transition">
+              🎯 Ngày thi kế tiếp
+            </button>
+            <button id="btnResetProgress" class="px-2.5 py-2 rounded-xl text-xs font-medium muted-txt hover:text-rose-400 cursor-pointer transition">
+              Reset
+            </button>
+          </div>
+        </div>
+
+        <!-- Orbital Dual Gradient Ring Core -->
+        <div class="flex items-center gap-5 rounded-2xl p-4 sm:p-5 shrink-0"
+             style="background: linear-gradient(145deg, color-mix(in srgb, var(--g1) 14%, var(--surface-2)), color-mix(in srgb, var(--g3) 14%, var(--surface-2))); border: 1px solid color-mix(in srgb, var(--g2) 40%, transparent);">
+          <div class="relative w-28 h-28 flex items-center justify-center">
+            <svg class="w-28 h-28 -rotate-90" viewBox="0 0 120 120">
+              <circle cx="60" cy="60" r="50" fill="none" stroke="color-mix(in srgb, var(--muted) 22%, transparent)" stroke-width="9" />
+              <circle id="ringSessions" class="ring-arc" cx="60" cy="60" r="50" fill="none"
+                      stroke="url(#svgGradPrimary)" stroke-width="9" stroke-linecap="round"
+                      stroke-dasharray="314.16" stroke-dashoffset="314.16" />
+              <circle cx="60" cy="60" r="37" fill="none" stroke="color-mix(in srgb, var(--muted) 16%, transparent)" stroke-width="5.5" />
+              <circle id="ringPareto" class="ring-arc" cx="60" cy="60" r="37" fill="none"
+                      stroke="url(#svgGradPareto)" stroke-width="5.5" stroke-linecap="round"
+                      stroke-dasharray="232.48" stroke-dashoffset="232.48" />
+            </svg>
+            <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+              <span id="hudPercent" class="text-xl font-black font-mono tabular-nums hero-grad-text">0%</span>
+              <span class="text-xs muted-txt font-mono">TIẾN ĐỘ</span>
+            </div>
+          </div>
+
+          <div class="space-y-2.5 min-w-[168px]">
+            <div>
+              <div class="text-xs muted-txt">Giờ thực học</div>
+              <div class="text-xl font-black font-mono tabular-nums">
+                <span id="hudHoursDone" class="hero-grad-text">0</span>
+                <span class="text-xs font-normal muted-txt">/ <span id="hudHoursTotal">0</span>h</span>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-2 pt-1.5 border-t" style="border-color: var(--border-soft);">
+              <div>
+                <div class="text-xs muted-txt">Lõi 20/80</div>
+                <div id="hudParetoDone" class="text-xs font-bold font-mono tabular-nums" style="color: #f59e0b;">0/28</div>
+              </div>
+              <div>
+                <div class="text-xs muted-txt">Đã thi</div>
+                <div id="hudExams" class="text-xs font-bold font-mono tabular-nums" style="color: var(--g-ok1);">0/8</div>
+              </div>
+            </div>
+            <div class="text-xs flex items-center gap-1.5 muted-txt">
+              <span class="w-2.5 h-2.5 rounded-full" style="background: linear-gradient(135deg, var(--g-ok1), var(--g-ok2));"></span>
+              <span>GPA dự kiến: <strong id="hudProjGpa" class="font-mono" style="color:var(--fg)">4.00</strong></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Telemetry Bento Strip -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mt-5 pt-4 border-t" style="border-color: var(--border-soft);">
+        <div class="rounded-xl p-3.5 flex items-center justify-between gap-3"
+             style="background: linear-gradient(135deg, color-mix(in srgb, var(--g1) 14%, var(--surface-2)), color-mix(in srgb, var(--g2) 8%, var(--surface-2))); border: 1px solid color-mix(in srgb, var(--g1) 36%, transparent);">
+          <div class="min-w-0">
+            <div class="text-xs font-mono uppercase tracking-wider font-bold" style="color: var(--g1);">Mục tiêu kế tiếp</div>
+            <div id="teleNextExam" class="text-sm font-bold truncate mt-0.5">Tiếng Anh (Course 2)</div>
+            <div id="teleNextMeta" class="text-xs muted-txt font-mono mt-0.5">15/12 · 13:00 · P.2A23</div>
+          </div>
+          <div id="teleNextCredits" class="px-2.5 py-1.5 rounded-lg font-mono text-xs font-extrabold text-white shrink-0"
+               style="background: linear-gradient(135deg, var(--g1), var(--g2));">4 TC</div>
+        </div>
+
+        <div class="rounded-xl p-3.5 space-y-1.5"
+             style="background: linear-gradient(135deg, color-mix(in srgb, var(--g-hot1) 15%, var(--surface-2)), color-mix(in srgb, var(--g-hot2) 10%, var(--surface-2))); border: 1px solid color-mix(in srgb, var(--g-hot1) 42%, transparent);">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono uppercase tracking-wider font-bold" style="color: var(--g-hot1);">Tuần Tử Thần</span>
+            <span class="text-xs font-mono muted-txt">22–25/12</span>
+          </div>
+          <div class="text-xs font-semibold">3 môn nặng trong 4 ngày</div>
+          <div class="flex items-center gap-1 text-xs font-mono text-white">
+            <span class="px-1.5 py-0.5 rounded font-bold" style="background: linear-gradient(135deg, #8b5cf6, #ec4899);">KTL</span>
+            <span class="muted-txt">→</span>
+            <span class="px-1.5 py-0.5 rounded font-bold" style="background: linear-gradient(135deg, #f59e0b, #ea580c);">KT</span>
+            <span class="muted-txt">→</span>
+            <span class="px-1.5 py-0.5 rounded font-bold" style="background: linear-gradient(135deg, #ec4899, #7c3aed);">MKT 7h30</span>
+          </div>
+        </div>
+
+        <div class="rounded-xl p-3.5 space-y-1.5"
+             style="background: linear-gradient(135deg, color-mix(in srgb, #f59e0b 14%, var(--surface-2)), color-mix(in srgb, #ec4899 10%, var(--surface-2))); border: 1px solid color-mix(in srgb, #f59e0b 38%, transparent);">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono uppercase tracking-wider font-bold" style="color: #f59e0b;">Đòn Bẩy 20/80</span>
+            <span class="text-xs font-mono font-bold">13 / 19 TC</span>
+          </div>
+          <div class="text-xs font-semibold">4 môn quyết định 68.4% GPA</div>
+          <div class="text-xs muted-txt truncate">TA (4) · KTL (3) · KT (3) · QTH (3)</div>
+        </div>
+
+        <div class="glass-sub rounded-xl p-3.5 space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono uppercase tracking-wider muted-txt">Chuỗi hoàn tất</span>
+            <span id="teleDaysDone" class="text-xs font-mono font-bold" style="color: var(--g-ok1);">0 / 48 ngày</span>
+          </div>
+          <div class="w-full h-2.5 rounded-full overflow-hidden" style="background: color-mix(in srgb, var(--muted) 22%, transparent);">
+            <div id="teleDaysBar" class="h-full rounded-full transition-all duration-500"
+                 style="width: 0%; background: linear-gradient(90deg, var(--g1), var(--g2), var(--g3), var(--g4));"></div>
+          </div>
+          <div class="text-xs muted-txt">Tick đủ ngày → pháo sáng ✨</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- FLOATING SEGMENTED NAVIGATION DOCK -->
+    <nav class="glass-panel rounded-2xl p-1.5 flex flex-wrap items-center justify-between gap-2 sticky top-3 z-30">
+      <div class="flex flex-wrap items-center gap-1.5">
+        <button data-tab="pareto" class="tab-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold muted-txt inline-flex items-center gap-1.5 cursor-pointer transition">
+          ⚡ Chiến Lược 20/80
+        </button>
+        <button data-tab="schedule" class="tab-btn grad-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold inline-flex items-center gap-1.5 cursor-pointer transition">
+          📋 Lộ Trình 48 Ngày
+        </button>
+        <button data-tab="calendar" class="tab-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold muted-txt inline-flex items-center gap-1.5 cursor-pointer transition">
+          🗓️ Lịch Ma Trận
+        </button>
+        <button data-tab="exams" class="tab-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold muted-txt inline-flex items-center gap-1.5 cursor-pointer transition">
+          🎯 Radar 8 Môn
+        </button>
+        <button data-tab="tools" class="tab-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold muted-txt inline-flex items-center gap-1.5 cursor-pointer transition">
+          ⏱️ Pomodoro & GPA
+        </button>
+      </div>
+
+      <div id="miniTimerPill" class="hidden items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold text-white cursor-pointer"
+           style="background: linear-gradient(135deg, var(--g1), var(--g3));">
+        <span class="beacon-dot"></span>
+        <span id="miniTimerText">50:00</span>
+      </div>
+    </nav>
+
+    <!-- ========================================== -->
+    <!-- TAB 0: PARETO 20/80 CORE MASTERY           -->
+    <!-- ========================================== -->
+    <section id="tab-pareto" class="hidden space-y-5">
+      <div class="glass-panel holo-bar rounded-2xl p-5 sm:p-6 space-y-4">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div class="space-y-1">
+            <span class="grad-pareto px-2.5 py-0.5 rounded-full text-xs font-mono font-bold">NGUYÊN TẮC PARETO 20/80 CHO GPA 4.0</span>
+            <h2 class="font-display text-xl sm:text-2xl font-bold mt-1">Đánh Trúng 20% Kiến Thức Lõi → Ăn Trọn 80% Điểm Thi</h2>
+            <p class="text-xs sm:text-sm muted-txt max-w-3xl">
+              Thay vì học dàn trải mọi dòng trong giáo trình rồi quá tải ở Tuần Tử Thần, chỉ cần nắm chắc tuyệt đối <strong style="color:var(--fg)">28 gạch đầu dòng cốt lõi</strong> dưới đây là đủ khóa chặt mốc <strong style="color:var(--g-ok1)">8.5+ (Điểm A)</strong> cho cả 8 môn. Tick từng mục khi mày đã tự giải / tự giảng lại được không cần nhìn vở!
+            </p>
+          </div>
+          <div class="glass-sub rounded-2xl p-4 text-center shrink-0 min-w-[150px]" style="border-color: color-mix(in srgb, #f59e0b 45%, transparent);">
+            <div class="text-xs font-mono muted-txt">ĐÃ KHÓA LÕI 20/80</div>
+            <div id="paretoPctBig" class="text-3xl font-black font-mono mt-1" style="background: linear-gradient(135deg, #f59e0b, #ec4899); -webkit-background-clip: text; background-clip: text; color: transparent;">0%</div>
+            <div id="paretoCountSub" class="text-xs font-mono muted-txt mt-0.5">0 / 28 mục lõi</div>
+          </div>
+        </div>
+
+        <!-- 80/20 Credit Weight Visual Bar -->
+        <div class="glass-sub rounded-xl p-4 space-y-2.5">
+          <div class="flex flex-wrap items-center justify-between gap-2 text-xs">
+            <span class="font-bold">Phân tầng trọng số tín chỉ (19 TC):</span>
+            <span class="font-mono"><strong style="color:#06b6d4">Tier 1 (4 môn = 13 TC = 68.4% GPA)</strong> · <span class="muted-txt">Tier 2 (4 môn = 6 TC = 31.6%)</span></span>
+          </div>
+          <div class="w-full h-4 rounded-full overflow-hidden flex gap-0.5">
+            <div style="width:21.1%; background:linear-gradient(135deg,#06b6d4,#2563eb);" title="Tiếng Anh: 4 TC (21.1%)"></div>
+            <div style="width:15.8%; background:linear-gradient(135deg,#8b5cf6,#ec4899);" title="Kinh tế lượng: 3 TC (15.8%)"></div>
+            <div style="width:15.8%; background:linear-gradient(135deg,#f59e0b,#ea580c);" title="Kế toán: 3 TC (15.8%)"></div>
+            <div style="width:15.8%; background:linear-gradient(135deg,#4f46e5,#0ea5e9);" title="Quản trị học: 3 TC (15.8%)"></div>
+            <div style="width:10.5%; background:linear-gradient(135deg,#f43f5e,#be123c);" title="KTCT: 2 TC (10.5%)"></div>
+            <div style="width:10.5%; background:linear-gradient(135deg,#ec4899,#7c3aed);" title="Marketing: 2 TC (10.5%)"></div>
+            <div style="width:5.25%; background:linear-gradient(135deg,#14b8a6,#10b981);" title="Văn bản: 1 TC (5.3%)"></div>
+            <div style="width:5.25%; background:linear-gradient(135deg,#84cc16,#059669);" title="Làm việc nhóm: 1 TC (5.3%)"></div>
+          </div>
+          <div class="flex flex-wrap gap-3 text-xs muted-txt">
+            <span><strong>Quy tắc sống còn:</strong> Ngày nào bận hoặc mệt, bấm bộ lọc <span class="grad-pareto px-1.5 py-0.5 rounded font-mono text-xs">⚡ Chỉ ca 20/80</span> ở Lộ Trình để giữ nhịp đúng các ca tạo ra 80% điểm!</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8 Subject Pareto Core Checklists -->
+      <div id="paretoGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 1: SCHEDULE                            -->
+    <!-- ========================================== -->
+    <section id="tab-schedule" class="space-y-4">
+      <div class="glass-panel rounded-2xl p-4 space-y-3.5">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+          <div class="flex flex-wrap items-center gap-1.5">
+            <button data-phase="all" class="phase-btn chip-active px-3 py-1.5 rounded-xl text-xs font-semibold border cursor-pointer transition" style="border-color:var(--border);">Tất cả (48 ngày)</button>
+            <button data-phase="1" class="phase-btn px-3 py-1.5 rounded-xl text-xs font-medium border glass-sub cursor-pointer transition" style="border-color:var(--border);">GĐ 1 · Xây nền</button>
+            <button data-phase="2" class="phase-btn px-3 py-1.5 rounded-xl text-xs font-medium border glass-sub cursor-pointer transition" style="border-color:var(--border);">GĐ 2 · Cao điểm thi</button>
+            <button data-phase="3" class="phase-btn px-3 py-1.5 rounded-xl text-xs font-medium border glass-sub cursor-pointer transition" style="border-color:var(--border);">GĐ 3 · Về đích</button>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2">
+            <div class="relative">
+              <svg class="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 muted-txt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input id="searchInput" type="text" placeholder="Tìm chương, bài tập... ( / )"
+                     class="pl-8 pr-3 py-1.5 rounded-xl text-xs glass-sub focus:outline-none focus:border-[var(--g1)] w-52 sm:w-60" style="color:var(--fg);" />
+            </div>
+
+            <button id="toggleParetoOnlyBtn" class="px-3 py-1.5 rounded-xl text-xs font-bold border glass-sub cursor-pointer transition" style="border-color: color-mix(in srgb, #f59e0b 45%, var(--border));">⚡ Chỉ ca 20/80</button>
+            <button id="togglePendingBtn" class="px-3 py-1.5 rounded-xl text-xs font-medium border glass-sub cursor-pointer transition" style="border-color:var(--border);">Chưa xong</button>
+            <button id="toggleExamsBtn" class="px-3 py-1.5 rounded-xl text-xs font-medium border glass-sub cursor-pointer transition" style="border-color:var(--border);">Ngày thi</button>
+
+            <div class="flex items-center p-0.5 rounded-xl glass-sub border" style="border-color:var(--border);">
+              <button data-layout="bento" class="layout-btn chip-active px-2.5 py-1 rounded-lg text-xs font-semibold border border-transparent cursor-pointer transition">Bento</button>
+              <button data-layout="timeline" class="layout-btn px-2.5 py-1 rounded-lg text-xs font-medium border border-transparent muted-txt cursor-pointer transition">Timeline</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="subjectFilterBar" class="flex flex-wrap items-center gap-1.5 pt-2.5 border-t" style="border-color:var(--border-soft);"></div>
+      </div>
+
+      <div id="scheduleRoot"></div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 2: MATRIX CALENDAR + SIDE INSPECTOR    -->
+    <!-- ========================================== -->
+    <section id="tab-calendar" class="hidden">
+      <div class="grid grid-cols-1 xl:grid-cols-12 gap-4 items-start">
+        <div class="xl:col-span-8 glass-panel holo-bar rounded-2xl p-4 sm:p-5 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-1.5">
+              <button data-month="2026-11" class="month-btn grad-btn px-3.5 py-1.5 rounded-xl text-xs font-bold cursor-pointer transition">Tháng 11 / 2026</button>
+              <button data-month="2026-12" class="month-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold border glass-sub cursor-pointer transition" style="border-color:var(--border);">Tháng 12 / 2026</button>
+              <button data-month="2027-01" class="month-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold border glass-sub cursor-pointer transition" style="border-color:var(--border);">Tháng 01 / 2027</button>
+            </div>
+            <div class="flex flex-wrap items-center gap-3 text-xs muted-txt">
+              <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full" style="background: linear-gradient(135deg, var(--g-hot1), var(--g-hot2));"></span>Ngày thi</span>
+              <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full" style="background: #f59e0b;"></span>T2-4-6 Bận tối</span>
+              <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full" style="background: linear-gradient(135deg, var(--g-ok1), var(--g-ok2));"></span>Xong 100%</span>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto custom-scroll">
+            <div class="min-w-[640px]">
+              <div class="grid grid-cols-7 gap-2 mb-2 text-center text-xs font-mono font-semibold muted-txt">
+                <div class="py-2 rounded-lg glass-sub">T2 <span style="color:var(--g-hot2)">*</span></div>
+                <div class="py-2 rounded-lg glass-sub">T3</div>
+                <div class="py-2 rounded-lg glass-sub">T4 <span style="color:var(--g-hot2)">*</span></div>
+                <div class="py-2 rounded-lg glass-sub">T5</div>
+                <div class="py-2 rounded-lg glass-sub">T6 <span style="color:var(--g-hot2)">*</span></div>
+                <div class="py-2 rounded-lg glass-sub">T7</div>
+                <div class="py-2 rounded-lg glass-sub">CN</div>
+              </div>
+              <div id="calendarGrid" class="grid grid-cols-7 gap-2"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="xl:col-span-4 xl:sticky xl:top-20 space-y-3">
+          <div class="glass-panel holo-bar rounded-2xl p-4 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-mono uppercase tracking-wider font-bold hero-grad-text">Live Day Inspector</span>
+              <span class="text-xs muted-txt">Click ngày để xem</span>
+            </div>
+            <div id="calendarInspector"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 3: EXAM RADAR                          -->
+    <!-- ========================================== -->
+    <section id="tab-exams" class="hidden space-y-5">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5" id="subjectRadarGrid"></div>
+
+      <div class="glass-panel holo-bar rounded-2xl p-5 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <h2 class="font-display text-base font-bold">Phân Bổ Năng Lượng Ôn Tập Theo Môn</h2>
+            <p class="text-xs muted-txt">Ưu tiên thời lượng theo công thức: Độ khó × Số tín chỉ × Độ sát lịch thi</p>
+          </div>
+          <span class="text-xs font-mono px-3 py-1 rounded-full font-bold text-white" style="background: linear-gradient(135deg, var(--g1), var(--g3));">19 TÍN CHỈ</span>
+        </div>
+        <div id="hoursBarChart" class="space-y-3"></div>
+      </div>
+
+      <div class="glass-panel rounded-2xl p-5 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <h2 class="font-display text-base font-bold">Bảng Lịch Thi Chính Thức · Cơ Sở MN</h2>
+            <p class="text-xs muted-txt">Mọi môn thi thời lượng 100 phút</p>
+          </div>
+          <span class="grad-hot text-xs font-mono font-bold px-3 py-1 rounded-full">8/8 MÔN MỤC TIÊU ≥ 8.5</span>
+        </div>
+        <div class="overflow-x-auto custom-scroll">
+          <table class="w-full text-left border-collapse text-xs sm:text-sm">
+            <thead>
+              <tr class="border-b muted-txt font-mono text-xs uppercase" style="border-color:var(--border);">
+                <th class="py-3 px-3">Mã MH</th>
+                <th class="py-3 px-3">Môn học</th>
+                <th class="py-3 px-3 text-center">TC</th>
+                <th class="py-3 px-3">Ngày thi</th>
+                <th class="py-3 px-3 text-center">Giờ</th>
+                <th class="py-3 px-3 text-center">Phòng</th>
+                <th class="py-3 px-3">Chiến thuật ưu tiên</th>
+                <th class="py-3 px-3 text-right">Thao tác</th>
+              </tr>
+            </thead>
+            <tbody id="examBoardBody" class="divide-y" style="border-color:var(--border-soft);"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 4: POMODORO REACTOR & GPA SIMULATOR    -->
+    <!-- ========================================== -->
+    <section id="tab-tools" class="hidden space-y-5">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+
+        <div class="lg:col-span-5 glass-panel holo-bar rounded-2xl p-5 flex flex-col justify-between gap-5">
+          <div class="flex items-start justify-between gap-2">
+            <div>
+              <span class="text-xs font-mono uppercase tracking-wider font-bold hero-grad-text">Neural Focus Reactor</span>
+              <h2 class="font-display text-lg font-bold mt-0.5">Đồng Hồ Deep Work</h2>
+            </div>
+            <div class="flex gap-1 p-1 rounded-xl glass-sub">
+              <button data-pomo="50" class="pomo-mode-btn chip-active px-2.5 py-1 rounded-lg text-xs font-semibold border border-transparent cursor-pointer">50p</button>
+              <button data-pomo="25" class="pomo-mode-btn px-2.5 py-1 rounded-lg text-xs font-medium border border-transparent muted-txt cursor-pointer">25p</button>
+              <button data-pomo="10" class="pomo-mode-btn px-2.5 py-1 rounded-lg text-xs font-medium border border-transparent muted-txt cursor-pointer">Nghỉ 10p</button>
+            </div>
+          </div>
+
+          <div id="pomoSessionBanner" class="rounded-xl p-3 text-xs flex items-center justify-between gap-2"
+               style="background: linear-gradient(135deg, color-mix(in srgb, var(--g1) 14%, var(--surface-2)), color-mix(in srgb, var(--g3) 14%, var(--surface-2))); border: 1px solid color-mix(in srgb, var(--g2) 34%, transparent);">
+            <div class="min-w-0">
+              <div class="muted-txt font-mono">NHIỆM VỤ ĐANG FOCUS</div>
+              <div id="pomoSessionTitle" class="font-semibold truncate mt-0.5">Tự do (hoặc bấm ▶ ở bất kỳ ca nào)</div>
+            </div>
+            <button id="pomoCompleteLinked" class="hidden grad-ok shrink-0 px-2.5 py-1.5 rounded-lg font-bold cursor-pointer">✓ Tick xong</button>
+          </div>
+
+          <div class="flex flex-col items-center justify-center py-2">
+            <div class="relative w-56 h-56 flex items-center justify-center">
+              <div class="absolute inset-6 rounded-full opacity-25 blur-2xl" style="background: radial-gradient(circle, var(--g1), var(--g3), transparent);"></div>
+              <svg class="w-56 h-56 -rotate-90 relative z-10" viewBox="0 0 200 200">
+                <circle cx="100" cy="100" r="86" fill="none" stroke="color-mix(in srgb, var(--muted) 22%, transparent)" stroke-width="11" />
+                <circle id="pomoRingArc" class="ring-arc" cx="100" cy="100" r="86" fill="none"
+                        stroke="url(#svgGradPrimary)" stroke-width="11" stroke-linecap="round"
+                        stroke-dasharray="540.35" stroke-dashoffset="0" />
+              </svg>
+              <div class="absolute inset-0 z-10 flex flex-col items-center justify-center">
+                <div id="pomoStateTag" class="text-xs font-mono font-bold uppercase tracking-widest hero-grad-text">READY</div>
+                <div id="pomoDisplay" class="text-4xl sm:text-5xl font-black font-mono tabular-nums tracking-tight mt-1">50:00</div>
+                <div id="pomoSubLabel" class="text-xs muted-txt mt-1">Phiên học sâu 50 phút</div>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2.5 mt-4">
+              <button id="pomoStart" class="grad-btn px-6 py-2.5 rounded-xl text-xs font-bold cursor-pointer">Bắt đầu Focus</button>
+              <button id="pomoPause" class="glass-sub hover:border-[var(--g1)] px-4 py-2.5 rounded-xl text-xs font-semibold cursor-pointer transition">Tạm dừng</button>
+              <button id="pomoReset" class="glass-sub px-4 py-2.5 rounded-xl text-xs font-medium muted-txt cursor-pointer transition">Reset</button>
+            </div>
+          </div>
+
+          <div class="glass-sub rounded-xl p-3 text-xs muted-txt">
+            <strong style="color:var(--fg)">Nhịp chuẩn 5h/ngày:</strong> Ca 2h = 2 phiên 50/10. Ca 2.5h (T2–4–6) = 2 phiên 50/10 + 30p tự trả bài không nhìn vở.
+          </div>
+        </div>
+
+        <div class="lg:col-span-7 glass-panel holo-bar rounded-2xl p-5 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <span class="text-xs font-mono uppercase tracking-wider font-bold hero-grad-text">GPA 4.0 Simulator</span>
+              <h2 class="font-display text-lg font-bold mt-0.5">Tính Điểm Thi Cuối Kỳ Cần Đạt Cho 8 Môn</h2>
+              <p class="text-xs muted-txt">Nhập điểm CC & GK/BTL để thấy ngay từng môn cần thi cuối kỳ bao nhiêu để giữ 4.0</p>
+            </div>
+            <div class="rounded-xl px-4 py-2.5 text-right text-white"
+                 style="background: linear-gradient(135deg, var(--g-ok1), var(--g-ok2)); box-shadow: 0 8px 24px -8px color-mix(in srgb, var(--g-ok1) 65%, transparent);">
+              <div class="text-xs font-mono opacity-90">GPA DỰ KIẾN</div>
+              <div id="simTotalGpa" class="text-2xl font-black font-mono tabular-nums">4.00</div>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2 text-xs">
+            <span class="muted-txt">Tỷ trọng (CC / GK / CK):</span>
+            <button data-weights="10,20,70" class="weight-preset chip-active px-2.5 py-1 rounded-lg border font-mono cursor-pointer" style="border-color:var(--border);">10 / 20 / 70</button>
+            <button data-weights="10,30,60" class="weight-preset px-2.5 py-1 rounded-lg border glass-sub font-mono cursor-pointer" style="border-color:var(--border);">10 / 30 / 60</button>
+            <button data-weights="20,20,60" class="weight-preset px-2.5 py-1 rounded-lg border glass-sub font-mono cursor-pointer" style="border-color:var(--border);">20 / 20 / 60</button>
+          </div>
+
+          <div class="overflow-x-auto custom-scroll">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr class="border-b muted-txt font-mono" style="border-color:var(--border);">
+                  <th class="py-2 pr-2">Môn học (TC)</th>
+                  <th class="py-2 px-1.5 text-center">CC</th>
+                  <th class="py-2 px-1.5 text-center">GK/BTL</th>
+                  <th class="py-2 px-1.5 text-center">Cần thi A</th>
+                  <th class="py-2 pl-2 text-center">Dự kiến thi</th>
+                  <th class="py-2 pl-2 text-right">Kết quả</th>
+                </tr>
+              </thead>
+              <tbody id="gpaSimBody" class="divide-y" style="border-color:var(--border-soft);"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    const SUBJECTS = {
+      KTL: { id:'KTL', code:'BSA1309', name:'Kinh tế lượng', short:'Kinh tế lượng', credits:3, c1:'#8b5cf6', c2:'#ec4899', grad:'linear-gradient(135deg, #8b5cf6, #ec4899)', svgGrad:'url(#svgGradKTL)', examDate:'2026-12-22', examTime:'13:00', room:'2B32', risk:'Khó nhất kỳ — ưu tiên tối đa' },
+      TA:  { id:'TA',  code:'BAS1158', name:'Tiếng Anh (Course 2)', short:'Tiếng Anh', credits:4, c1:'#06b6d4', c2:'#2563eb', grad:'linear-gradient(135deg, #06b6d4, #2563eb)', svgGrad:'url(#svgGradTA)', examDate:'2026-12-15', examTime:'13:00', room:'2A23', risk:'4 TC (21% GPA) — thi đầu tiên' },
+      KT:  { id:'KT',  code:'FIA1389', name:'Kế toán cho kinh doanh', short:'Kế toán', credits:3, c1:'#f59e0b', c2:'#ea580c', grad:'linear-gradient(135deg, #f59e0b, #ea580c)', svgGrad:'url(#svgGradKT)', examDate:'2026-12-24', examTime:'09:30', room:'2A16', risk:'Nặng định khoản, sát KTL 1 ngày' },
+      KTCT:{ id:'KTCT',code:'BAS1151', name:'Kinh tế chính trị Mác - Lênin', short:'KTCT Mác-Lênin', credits:2, c1:'#f43f5e', c2:'#be123c', grad:'linear-gradient(135deg, #f43f5e, #be123c)', svgGrad:'url(#svgGradKTCT)', examDate:'2026-12-18', examTime:'14:45', room:'2A2425', risk:'Lý thuyết dài + bài tập thặng dư' },
+      MKT: { id:'MKT', code:'MAR1424', name:'Quản trị Marketing', short:'QT Marketing', credits:2, c1:'#ec4899', c2:'#7c3aed', grad:'linear-gradient(135deg, #ec4899, #7c3aed)', svgGrad:'url(#svgGradMKT)', examDate:'2026-12-25', examTime:'07:30', room:'2B34', risk:'Thi sáng 7h30 ngay sau Kế toán!' },
+      VB:  { id:'VB',  code:'SKD1103', name:'Kỹ năng tạo lập Văn bản', short:'Tạo lập Văn bản', credits:1, c1:'#14b8a6', c2:'#10b981', grad:'linear-gradient(135deg, #14b8a6, #10b981)', svgGrad:'url(#svgGradVB)', examDate:'2026-12-29', examTime:'14:45', room:'2A33', risk:'Dễ gỡ A+, chú ý thể thức NĐ30' },
+      QTH: { id:'QTH', code:'BSA1328', name:'Quản trị học', short:'Quản trị học', credits:3, c1:'#4f46e5', c2:'#0ea5e9', grad:'linear-gradient(135deg, #4f46e5, #0ea5e9)', svgGrad:'url(#svgGradQTH)', examDate:'2027-01-07', examTime:'09:30', room:'2A16', risk:'3 TC — Thi double ngày cuối' },
+      LVN: { id:'LVN', code:'SKD1102', name:'Kỹ năng làm việc nhóm', short:'Làm việc nhóm', credits:1, c1:'#84cc16', c2:'#059669', grad:'linear-gradient(135deg, #84cc16, #059669)', svgGrad:'url(#svgGradLVN)', examDate:'2027-01-07', examTime:'13:00', room:'2B03', risk:'Nhẹ, thi chiều ngay sau QTH' },
+      GEN: { id:'GEN', code:'', name:'Tổng hợp / Nghỉ ngơi', short:'Tổng hợp', credits:0, c1:'#64748b', c2:'#94a3b8', grad:'linear-gradient(135deg, #64748b, #94a3b8)', svgGrad:'url(#svgGradPrimary)', examDate:'', examTime:'', room:'', risk:'' }
+    };
+
+    const EXAM_ORDER = ['TA', 'KTCT', 'KTL', 'KT', 'MKT', 'VB', 'QTH', 'LVN'];
+
+    // 20/80 Core Knowledge Checklist (28 high-leverage items = 80%+ of exam score!)
+    const PARETO_CORE = {
+      TA: [
+        { id:'p-ta-1', text:'Thuộc toàn bộ từ vựng trọng tâm & cụm từ (collocations) của các Unit trong giáo trình Course 2' },
+        { id:'p-ta-2', text:'Nắm chắc 6 điểm ngữ pháp hay bẫy (Thì, Câu điều kiện, Bị động, Mệnh đề quan hệ, So sánh, Giới từ)' },
+        { id:'p-ta-3', text:'Hoàn thành 6 đề mẫu chuẩn format trường + giữ Sổ Lỗi Sai để không lặp lại lỗi cũ' },
+        { id:'p-ta-4', text:'Chiến thuật làm bài Reading/Writing nhanh: gạch từ khóa paraphrase & mẫu khung bài viết chuẩn' }
+      ],
+      KTL: [
+        { id:'p-ktl-1', text:'Đọc thành thạo bảng kết quả EViews/Stata & diễn giải đúng ý nghĩa kinh tế hệ số β, R², R² hiệu chỉnh' },
+        { id:'p-ktl-2', text:'Thuộc lòng quy trình 4 bước kiểm định t-test, F-test, p-value, khoảng tin cậy & bài toán biến giả (Dummy)' },
+        { id:'p-ktl-3', text:'Nắm chắc dấu hiệu, kiểm định & cách khắc phục 3 khuyết tật: Đa cộng tuyến, PSSS thay đổi (White), Tự tương quan (BG)' },
+        { id:'p-ktl-4', text:'Giải bấm giờ thành thạo 5 đề thi mẫu các năm trước không sai thao tác máy tính Casio' }
+      ],
+      KT: [
+        { id:'p-kt-1', text:'Thuộc lòng kết cấu Nợ/Có của 20 tài khoản cốt lõi (111, 112, 131, 152, 156, 211, 214, 331, 334, 511, 632, 641, 642, 911)' },
+        { id:'p-kt-2', text:'Thành thạo định khoản 4 chu trình lớn: Mua hàng/Kho (FIFO, Bình quân), Bán hàng, Khấu hao TSCĐ, Tiền lương' },
+        { id:'p-kt-3', text:'Biết thực hiện bút toán kết chuyển 911 → Xác định KQKD → Lên Bảng CĐKT cân Tổng Nợ = Tổng Có' },
+        { id:'p-kt-4', text:'Giải trọn vẹn 3 đề tổng hợp bấm giờ 100p không lệch số dư cuối kỳ' }
+      ],
+      KTCT: [
+        { id:'p-ktct-1', text:'Chương 2: Hai thuộc tính hàng hóa, lượng giá trị & quy luật giá trị (luôn có câu hỏi thi)' },
+        { id:'p-ktct-2', text:'Chương 3: Giá trị thặng dư, phương pháp sản xuất m & giải chuẩn 100% bài tập tính m\', M, c/v, tuần hoàn tư bản' },
+        { id:'p-ktct-3', text:'Chương 5–6: Đặc trưng KTTT định hướng XHCN ở Việt Nam, lợi ích kinh tế & hội nhập kinh tế quốc tế' }
+      ],
+      MKT: [
+        { id:'p-mkt-1', text:'Môi trường Marketing (vi mô/vĩ mô) & quy trình ra quyết định mua của người tiêu dùng' },
+        { id:'p-mkt-2', text:'Chiến lược STP (Phân đoạn thị trường – Chọn thị trường mục tiêu – Định vị thương hiệu)' },
+        { id:'p-mkt-3', text:'4P cốt lõi: Product (PLC), Price (chiến lược định giá), Place (kênh phân phối), Promotion (IMC)' },
+        { id:'p-mkt-4', text:'Chuẩn bị sẵn 3 case doanh nghiệp (Vinamilk, Shopee, Apple/VinFast) để lồng ví dụ ăn điểm 9+' }
+      ],
+      VB: [
+        { id:'p-vb-1', text:'Thuộc chính xác thể thức & kỹ thuật trình bày văn bản theo Nghị định 30/2020/NĐ-CP' },
+        { id:'p-vb-2', text:'Viết tay chuẩn 5 mẫu văn bản hay ra thi nhất: Công văn, Tờ trình, Quyết định, Báo cáo, Biên bản' },
+        { id:'p-vb-3', text:'Soát lỗi trừ điểm oan: Quốc hiệu–Tiêu ngữ, Số/Ký hiệu, Địa danh ngày tháng, Trích yếu, Nơi nhận, Chức vụ ký' }
+      ],
+      QTH: [
+        { id:'p-qth-1', text:'Khung 4 chức năng kinh điển: Hoạch định (MBO, SWOT) – Tổ chức (Cơ cấu, phân quyền) – Lãnh đạo – Kiểm soát' },
+        { id:'p-qth-2', text:'Các học thuyết quản trị & động viên cốt lõi: Taylor, Fayol, Maslow, Herzberg, phong cách lãnh đạo' },
+        { id:'p-qth-3', text:'Kỹ năng trả lời câu hỏi tình huống quản trị theo barem (Nhận diện vấn đề → Áp lý thuyết → Đề xuất giải pháp)' }
+      ],
+      LVN: [
+        { id:'p-lvn-1', text:'5 giai đoạn phát triển nhóm của Tuckman (Forming → Storming → Norming → Performing → Adjourning)' },
+        { id:'p-lvn-2', text:'Vai trò thành viên nhóm (Belbin), tư duy nhóm (Groupthink) & kỹ thuật ra quyết định nhóm' },
+        { id:'p-lvn-3', text:'5 phong cách giải quyết xung đột (Thomas-Kilmann) & ví dụ xử lý thành viên ỷ lại (free-rider)' }
+      ]
+    };
+
+    const SCHEDULE = [
+      // PHASE 1: Week 1 (21/11 - 29/11)
+      { date:'2026-11-21', dow:'Thứ 7', week:'Tuần 1 · Khởi động 4 môn trụ cột (21/11 – 29/11)', phase:1, busy:false, sessions:[
+        { id:'2026-11-21-S', slot:'Sáng', time:'08:00–10:00', hrs:2, subj:'KTL', core:true, text:'Chương 1 & Hồi quy 2 biến (OLS) — đọc hiểu bảng kết quả' },
+        { id:'2026-11-21-C', slot:'Chiều', time:'15:30–17:00', hrs:1.5, subj:'TA', core:true, text:'Từ vựng + Ngữ pháp cốt lõi Unit 1–2' },
+        { id:'2026-11-21-T', slot:'Tối', time:'20:30–22:00', hrs:1.5, subj:'KT', core:true, text:'Phương trình kế toán & kết cấu 20 tài khoản cốt lõi' }
+      ]},
+      { date:'2026-11-22', dow:'Chủ Nhật', week:'Tuần 1 · Khởi động 4 môn trụ cột (21/11 – 29/11)', phase:1, busy:false, sessions:[
+        { id:'2026-11-22-S', slot:'Sáng', time:'08:00–10:00', hrs:2, subj:'KTL', core:true, text:'Bài tập ước lượng OLS, R², diễn giải ý nghĩa hệ số β' },
+        { id:'2026-11-22-C', slot:'Chiều', time:'15:30–17:00', hrs:1.5, subj:'TA', text:'Luyện Reading / Listening Unit 1–2' },
+        { id:'2026-11-22-T', slot:'Tối', time:'20:30–22:00', hrs:1.5, subj:'KTCT', core:true, text:'Chương 2: Hàng hóa, Tiền tệ & Quy luật giá trị' }
+      ]},
+      { date:'2026-11-23', dow:'Thứ 2', week:'Tuần 1 · Khởi động 4 môn trụ cột (21/11 – 29/11)', phase:1, busy:true, sessions:[
+        { id:'2026-11-23-S', slot:'Sáng', time:'08:00–10:30', hrs:2.5, subj:'KT', core:true, text:'Định khoản cơ bản, sổ chữ T, bảng cân đối thử' },
+        { id:'2026-11-23-C', slot:'Chiều', time:'15:30–18:00', hrs:2.5, subj:'TA', core:true, text:'Unit 3–4 (Từ vựng, Ngữ pháp, bài tập ứng dụng)' }
+      ]},
+      { date:'2026-11-24', dow:'Thứ 3', week:'Tuần 1 · Khởi động 4 môn trụ cột (21/11 – 29/11)', phase:1, busy:false, sessions:[
+        { id:'2026-11-24-S', slot:'Sáng', time:'08:00–10:00', hrs:2, subj:'KTL', core:true, text:'4 bước Kiểm định giả thuyết (t-test, p-value, khoảng tin cậy)' },
+        { id:'2026-11-24-C', slot:'Chiều', time:'15:30–17:00', hrs:1.5, subj:'KT', core:true, text:'Luyện 15–20 nghiệp vụ định khoản cốt lõi' },
+        { id:'2026-11-24-T', slot:'Tối', time:'20:30–22:00', hrs:1.5, subj:'KTCT', core:true, text:'Chương 3: Giá trị thặng dư (Lý thuyết + 4 công thức)' }
+      ]},
+      { date:'2026-11-25', dow:'Thứ 4', week:'Tuần 1 · Khởi động 4 môn trụ cột (21/11 – 29/11)', phase:1, busy:true, sessions:[
+        { id:'2026-11-25-S', slot:'Sáng', time:'08:00–10:30', hrs:2.5, subj:'KTL', core:true, text:'Hồi quy bội (Ước lượng, R² hiệu chỉnh, F-test)' },
+        { id:'2026-11-25-C', slot:'Chiều', time:'15:30–18:00', hrs:2.5, subj:'TA', text:'Unit 5–6 + Luyện kỹ năng Viết / Đọc trọng tâm' }
+      ]},
+      { date:'2026-11-26', dow:'Thứ 5', week:'Tuần 1 · Khởi động 4 môn trụ cột (21/11 – 29/11)', phase:1, busy:false, sessions:[
+        { id:'2026-11-26-S', slot:'Sáng', time:'08:00–10:00', hrs:2, subj:'KT', core:true, text:'Kế toán mua hàng, hàng tồn kho (FIFO, Bình quân gia quyền)' },
+        { id:'2026-11-26-C', slot:'Chiều', time:'15:30–17:00', hrs:1.5, subj:'KTL', core:true, text:'Bài tập hồi quy bội & đọc bảng kết quả EViews/Stata' },
+        { id:'2026-11-26-T', slot:'Tối', time:'20:30–22:00', hrs:1.5, subj:'KTCT', core:true, text:"Giải chuẩn bài tập tính m', M, c/v, tư bản bất biến/khả biến" }
+      ]},
+      { date:'2026-11-27', dow:'Thứ 6', week:'Tuần 1 · Khởi động 4 môn trụ cột (21/11 – 29/11)', phase:1, busy:true, sessions:[
+        { id:'2026-11-27-S', slot:'Sáng', time:'08:00–10:30', hrs:2.5, subj:'KT', core:true, text:'Kế toán bán hàng, doanh thu, giá vốn, kết chuyển 911' },
+        { id:'2026-11-27-C', slot:'Chiều', time:'15:30–18:00', hrs:2.5, subj:'TA', core:true, text:'Tổng hợp nửa đầu giáo trình + mini-test & Sổ lỗi sai' }
+      ]},
+      { date:'2026-11-28', dow:'Thứ 7', week:'Tuần 1 · Khởi động 4 môn trụ cột (21/11 – 29/11)', phase:1, busy:false, sessions:[
+        { id:'2026-11-28-S', slot:'Sáng', time:'08:00–10:00', hrs:2, subj:'KTL', core:true, text:'Biến giả (Dummy) & các dạng hàm (Log-Log, Lin-Log)' },
+        { id:'2026-11-28-C', slot:'Chiều', time:'15:30–17:00', hrs:1.5, subj:'MKT', core:true, text:'Môi trường Marketing & hành vi mua khách hàng' },
+        { id:'2026-11-28-T', slot:'Tối', time:'20:30–22:00', hrs:1.5, subj:'KTCT', text:'Chương 4: Cạnh tranh & Độc quyền trong nền KTTT' }
+      ]},
+      { date:'2026-11-29', dow:'Chủ Nhật', week:'Tuần 1 · Khởi động 4 môn trụ cột (21/11 – 29/11)', phase:1, busy:false, sessions:[
+        { id:'2026-11-29-S', slot:'Sáng', time:'08:00–10:00', hrs:2, subj:'KT', core:true, text:'Kế toán tài sản cố định, khấu hao, tiền lương & trích theo lương' },
+        { id:'2026-11-29-C', slot:'Chiều', time:'15:30–17:00', hrs:1.5, subj:'TA', text:'Học tiếp các Unit nửa sau giáo trình' },
+        { id:'2026-11-29-T', slot:'Tối', time:'20:30–22:00', hrs:1.5, subj:'GEN', text:'Review Tuần 1: Soát toàn bộ lỗi sai KTL & Kế toán' }
+      ]},
+
+      // PHASE 1: Week 2 (30/11 - 06/12)
+      { date:'2026-11-30', dow:'Thứ 2', week:'Tuần 2 · Hoàn thiện nền tảng & Chốt Marketing (30/11 – 06/12)', phase:1, busy:true, sessions:[
+        { id:'2026-11-30-S', slot:'Sáng', time:'08:00–10:30', hrs:2.5, subj:'KTL', core:true, text:'Khuyết tật mô hình: Đa cộng tuyến & PSSS thay đổi (White)' },
+        { id:'2026-11-30-C', slot:'Chiều', time:'15:30–18:00', hrs:2.5, subj:'TA', core:true, text:'Nửa sau giáo trình (Từ vựng + Grammar trọng tâm)' }
+      ]},
+      { date:'2026-12-01', dow:'Thứ 3', week:'Tuần 2 · Hoàn thiện nền tảng & Chốt Marketing (30/11 – 06/12)', phase:1, busy:false, sessions:[
+        { id:'2026-12-01-S', slot:'Sáng', time:'08:00–10:00', hrs:2, subj:'KTL', core:true, text:'Tự tương quan (BG) & chọn dạng mô hình (Ramsey RESET)' },
+        { id:'2026-12-01-C', slot:'Chiều', time:'15:30–17:00', hrs:1.5, subj:'KT', core:true, text:'Lập Bảng CĐKT & Báo cáo KQHĐKD cân Nợ = Có' },
+        { id:'2026-12-01-T', slot:'Tối', time:'20:30–22:00', hrs:1.5, subj:'MKT', core:true, text:'Chiến lược STP (Phân đoạn, Mục tiêu, Định vị)' }
+      ]},
+      { date:'2026-12-02', dow:'Thứ 4', week:'Tuần 2 · Hoàn thiện nền tảng & Chốt Marketing (30/11 – 06/12)', phase:1, busy:true, sessions:[
+        { id:'2026-12-02-S', slot:'Sáng', time:'08:00–10:30', hrs:2.5, subj:'KT', core:true, text:'Luyện bài tập tổng hợp lớn (Định khoản → Kết chuyển → Báo cáo)' },
+        { id:'2026-12-02-C', slot:'Chiều', time:'15:30–18:00', hrs:2.5, subj:'TA', core:true, text:'Hoàn thành 100% Unit + tổng hợp 6 bẫy ngữ pháp' }
+      ]},
+      { date:'2026-12-03', dow:'Thứ 5', week:'Tuần 2 · Hoàn thiện nền tảng & Chốt Marketing (30/11 – 06/12)', phase:1, busy:false, sessions:[
+        { id:'2026-12-03-S', slot:'Sáng', time:'08:00–10:00', hrs:2, subj:'KTL', core:true, text:'Tóm tắt toàn bộ kiểm định ra 1 trang A4 công thức chuẩn' },
+        { id:'2026-12-03-C', slot:'Chiều', time:'15:30–17:00', hrs:1.5, subj:'MKT', core:true, text:'4P: Chiến lược Sản phẩm (Product) & Định giá (Price)' },
+        { id:'2026-12-03-T', slot:'Tối', time:'20:30–22:00', hrs:1.5, subj:'KTCT', core:true, text:'Chương 5 & 6: KTTT định hướng XHCN & Hội nhập' }
+      ]},
+      { date:'2026-12-04', dow:'Thứ 6', week:'Tuần 2 · Hoàn thiện nền tảng & Chốt Marketing (30/11 – 06/12)', phase:1, busy:true, sessions:[
+        { id:'2026-12-04-S', slot:'Sáng', time:'08:00–10:30', hrs:2.5, subj:'KTL', core:true, text:'Giải full Đề mẫu #1 (Bấm giờ 100p + Chữa chi tiết)' },
+        { id:'2026-12-04-C', slot:'Chiều', time:'15:30–18:00', hrs:2.5, subj:'TA', core:true, text:'Làm Đề mẫu #1 (100p) + Ghi Sổ lỗi sai' }
+      ]},
+      { date:'2026-12-05', dow:'Thứ 7', week:'Tuần 2 · Hoàn thiện nền tảng & Chốt Marketing (30/11 – 06/12)', phase:1, busy:false, sessions:[
+        { id:'2026-12-05-S', slot:'Sáng', time:'08:00–10:00', hrs:2, subj:'KT', core:true, text:'Giải full Đề mẫu #1 (Bấm giờ 100p + Kiểm tra cân đối)' },
+        { id:'2026-12-05-C', slot:'Chiều', time:'15:30–17:00', hrs:1.5, subj:'MKT', core:true, text:'4P: Kênh phân phối (Place) & Xúc tiến hỗn hợp (Promotion)' },
+        { id:'2026-12-05-T', slot:'Tối', time:'20:30–22:00', hrs:1.5, subj:'KTCT', text:'Lập sơ đồ tư duy 6 chương (đề cương câu hỏi lớn)' }
+      ]},
+      { date:'2026-12-06', dow:'Chủ Nhật', week:'Tuần 2 · Hoàn thiện nền tảng & Chốt Marketing (30/11 – 06/12)', phase:1, busy:false, sessions:[
+        { id:'2026-12-06-S', slot:'Sáng', time:'08:00–10:00', hrs:2, subj:'KTL', text:'Chữa sâu lỗ hổng từ Đề #1 + luyện lại dạng bài yếu' },
+        { id:'2026-12-06-C', slot:'Chiều', time:'15:30–17:00', hrs:1.5, subj:'MKT', core:true, text:'Chuẩn bị 3 Case Study DN (Vinamilk, Shopee, Apple) + Đề mẫu #1' },
+        { id:'2026-12-06-T', slot:'Tối', time:'20:30–22:00', hrs:1.5, subj:'TA', text:'Ôn lại toàn bộ từ vựng & cấu trúc hay nhầm' }
+      ]},
+
+      // PHASE 1: Week 3 (07/12 - 14/12)
+      { date:'2026-12-07', dow:'Thứ 2', week:'Tuần 3 · Luyện đề 3 môn nặng & Chốt Tiếng Anh (07/12 – 14/12)', phase:1, busy:true, sessions:[
+        { id:'2026-12-07-S', slot:'Sáng', time:'08:00–10:30', hrs:2.5, subj:'KT', core:true, text:'Giải full Đề mẫu #2 + hệ thống bút toán bẫy hay ra thi' },
+        { id:'2026-12-07-C', slot:'Chiều', time:'15:30–18:00', hrs:2.5, subj:'TA', core:true, text:'Làm Đề mẫu #2 (100p) + học thuộc cụm từ sai' }
+      ]},
+      { date:'2026-12-08', dow:'Thứ 3', week:'Tuần 3 · Luyện đề 3 môn nặng & Chốt Tiếng Anh (07/12 – 14/12)', phase:1, busy:false, sessions:[
+        { id:'2026-12-08-S', slot:'Sáng', time:'08:00–10:00', hrs:2, subj:'KTL', core:true, text:'Giải full Đề mẫu #2 (100p) + chữa từng bước kiểm định' },
+        { id:'2026-12-08-C', slot:'Chiều', time:'15:30–17:00', hrs:1.5, subj:'MKT', core:true, text:'Chốt tờ tóm tắt 1 trang 4P–STP + ví dụ DN' },
+        { id:'2026-12-08-T', slot:'Tối', time:'20:30–22:00', hrs:1.5, subj:'KTCT', text:'Học thuộc ý chính Chương 2–3 + ý liên hệ thực tiễn' }
+      ]},
+      { date:'2026-12-09', dow:'Thứ 4', week:'Tuần 3 · Luyện đề 3 môn nặng & Chốt Tiếng Anh (07/12 – 14/12)', phase:1, busy:true, sessions:[
+        { id:'2026-12-09-S', slot:'Sáng', time:'08:00–10:30', hrs:2.5, subj:'KTL', text:'Giải Đề mẫu #3 (tăng tốc đọc bảng số liệu & kết luận)' },
+        { id:'2026-12-09-C', slot:'Chiều', time:'15:30–18:00', hrs:2.5, subj:'TA', core:true, text:'Làm Đề mẫu #3 (100p) + rà kỹ Writing / Listening' }
+      ]},
+      { date:'2026-12-10', dow:'Thứ 5', week:'Tuần 3 · Luyện đề 3 môn nặng & Chốt Tiếng Anh (07/12 – 14/12)', phase:1, busy:false, sessions:[
+        { id:'2026-12-10-S', slot:'Sáng', time:'08:00–10:00', hrs:2, subj:'KT', core:true, text:'Giải Đề mẫu #3 + lập Cheat-sheet 1 trang định khoản' },
+        { id:'2026-12-10-C', slot:'Chiều', time:'15:30–17:00', hrs:1.5, subj:'MKT', text:'Giải Đề mẫu #2 (luyện trình bày gạch ý đúng barem)' },
+        { id:'2026-12-10-T', slot:'Tối', time:'20:30–22:00', hrs:1.5, subj:'KTCT', text:'Học thuộc ý chính Chương 4–5–6' }
+      ]},
+      { date:'2026-12-11', dow:'Thứ 6', week:'Tuần 3 · Luyện đề 3 môn nặng & Chốt Tiếng Anh (07/12 – 14/12)', phase:1, busy:true, sessions:[
+        { id:'2026-12-11-S', slot:'Sáng', time:'08:00–10:30', hrs:2.5, subj:'TA', core:true, text:'Làm Đề mẫu #4 (bấm giờ chuẩn phòng thi)' },
+        { id:'2026-12-11-C', slot:'Chiều', time:'15:30–18:00', hrs:2.5, subj:'KTL', text:'Chốt sổ công thức + rà câu lý thuyết dễ mất điểm' }
+      ]},
+      { date:'2026-12-12', dow:'Thứ 7', week:'Tuần 3 · Luyện đề 3 môn nặng & Chốt Tiếng Anh (07/12 – 14/12)', phase:1, busy:false, sessions:[
+        { id:'2026-12-12-S', slot:'Sáng', time:'08:00–10:00', hrs:2, subj:'TA', core:true, text:'Chữa sâu Đề #4 + ôn kỹ năng yếu nhất' },
+        { id:'2026-12-12-C', slot:'Chiều', time:'15:30–17:00', hrs:1.5, subj:'TA', text:'Làm Đề mẫu #5' },
+        { id:'2026-12-12-T', slot:'Tối', time:'20:30–22:00', hrs:1.5, subj:'KTCT', text:'Ôn nhẩm dàn ý đề cương & làm lại bài tập Chương 3' }
+      ]},
+      { date:'2026-12-13', dow:'Chủ Nhật', week:'Tuần 3 · Luyện đề 3 môn nặng & Chốt Tiếng Anh (07/12 – 14/12)', phase:1, busy:false, sessions:[
+        { id:'2026-12-13-S', slot:'Sáng', time:'08:00–10:00', hrs:2, subj:'TA', core:true, text:'Làm Đề mẫu #6 + chốt danh sách bẫy ngữ pháp' },
+        { id:'2026-12-13-C', slot:'Chiều', time:'15:30–17:00', hrs:1.5, subj:'TA', text:'Luyện lại toàn bộ bài đọc/nghe/viết trọng tâm' },
+        { id:'2026-12-13-T', slot:'Tối', time:'20:30–22:00', hrs:1.5, subj:'KT', text:'Đọc lướt Cheat-sheet Kế toán & Marketing giữ trí nhớ' }
+      ]},
+      { date:'2026-12-14', dow:'Thứ 2', week:'Tuần 3 · Luyện đề 3 môn nặng & Chốt Tiếng Anh (07/12 – 14/12)', phase:1, busy:true, sessions:[
+        { id:'2026-12-14-S', slot:'Sáng', time:'08:00–10:30', hrs:2.5, subj:'TA', core:true, text:'Tổng duyệt Mock Exam cuối cùng (100p)' },
+        { id:'2026-12-14-C', slot:'Chiều', time:'15:30–18:00', hrs:2.5, subj:'TA', core:true, text:'Quét lại Sổ lỗi sai từ Đề 1→6, soạn đồ đi thi' }
+      ]},
+
+      // PHASE 2: Peak Exam Sprint (15/12 - 25/12)
+      { date:'2026-12-15', dow:'Thứ 3', week:'GĐ 2 · Cao điểm 5 môn liên tiếp (15/12 – 25/12)', phase:2, busy:false, exams:['TA'], sessions:[
+        { id:'2026-12-15-S', slot:'Sáng', time:'08:00–10:00', hrs:2, subj:'TA', text:'Đọc lướt sổ lỗi sai & từ vựng, giữ đầu nhẹ' },
+        { id:'2026-12-15-E', slot:'THI', time:'13:00–14:40', hrs:0, subj:'TA', isExam:true, core:true, text:'THI TIẾNG ANH (COURSE 2) — Phòng 2A23 (Cơ sở MN)' },
+        { id:'2026-12-15-T', slot:'Tối', time:'20:30–22:00', hrs:1.5, subj:'KTCT', core:true, text:'Tổng rà dàn ý Chương 2–3' }
+      ]},
+      { date:'2026-12-16', dow:'Thứ 4', week:'GĐ 2 · Cao điểm 5 môn liên tiếp (15/12 – 25/12)', phase:2, busy:true, sessions:[
+        { id:'2026-12-16-S', slot:'Sáng', time:'08:00–10:30', hrs:2.5, subj:'KTCT', core:true, text:'Học thuộc lòng luận điểm Chương 2–3 + luyện bài tập' },
+        { id:'2026-12-16-C', slot:'Chiều', time:'15:30–18:00', hrs:2.5, subj:'KTCT', core:true, text:'Học thuộc lòng luận điểm Chương 5–6 + ý vận dụng VN' }
+      ]},
+      { date:'2026-12-17', dow:'Thứ 5', week:'GĐ 2 · Cao điểm 5 môn liên tiếp (15/12 – 25/12)', phase:2, busy:false, sessions:[
+        { id:'2026-12-17-S', slot:'Sáng', time:'08:00–10:00', hrs:2, subj:'KTCT', core:true, text:'Luyện viết dàn ý nhanh cho bộ đề thi các năm trước' },
+        { id:'2026-12-17-C', slot:'Chiều', time:'15:30–17:00', hrs:1.5, subj:'KTCT', text:'Viết thử 1 đề hoàn chỉnh bấm giờ' },
+        { id:'2026-12-17-T', slot:'Tối', time:'20:30–22:00', hrs:1.5, subj:'KTCT', text:'Đọc nhẩm các ý dễ nhầm, đi ngủ sớm' }
+      ]},
+      { date:'2026-12-18', dow:'Thứ 6', week:'GĐ 2 · Cao điểm 5 môn liên tiếp (15/12 – 25/12)', phase:2, busy:true, exams:['KTCT'], sessions:[
+        { id:'2026-12-18-S', slot:'Sáng', time:'08:00–10:30', hrs:2.5, subj:'KTCT', text:'Tự kiểm tra bằng cách viết khung ý ra giấy trắng' },
+        { id:'2026-12-18-E', slot:'THI', time:'14:45–16:25', hrs:0, subj:'KTCT', isExam:true, core:true, text:'THI KINH TẾ CHÍNH TRỊ MÁC - LÊNIN — Phòng 2A2425 (MN)' }
+      ]},
+      { date:'2026-12-19', dow:'Thứ 7', week:'GĐ 2 · Cao điểm 5 môn liên tiếp (15/12 – 25/12)', phase:2, busy:false, sessions:[
+        { id:'2026-12-19-S', slot:'Sáng', time:'08:00–10:00', hrs:2, subj:'KTL', core:true, text:'Ôn toàn bộ công thức ước lượng, kiểm định, biến giả' },
+        { id:'2026-12-19-C', slot:'Chiều', time:'15:30–17:00', hrs:1.5, subj:'KTL', core:true, text:'Giải Đề mẫu #4 (Bấm giờ 100p)' },
+        { id:'2026-12-19-T', slot:'Tối', time:'20:30–22:00', hrs:1.5, subj:'KT', core:true, text:'Ôn nhanh lại Cheat-sheet định khoản Kế toán (tránh nguội)' }
+      ]},
+      { date:'2026-12-20', dow:'Chủ Nhật', week:'GĐ 2 · Cao điểm 5 môn liên tiếp (15/12 – 25/12)', phase:2, busy:false, sessions:[
+        { id:'2026-12-20-S', slot:'Sáng', time:'08:00–10:00', hrs:2, subj:'KTL', core:true, text:'Giải Đề mẫu #5 (Bấm giờ 100p) + chữa kỹ từng ý' },
+        { id:'2026-12-20-C', slot:'Chiều', time:'15:30–17:00', hrs:1.5, subj:'KTL', core:true, text:'Rà lỗi hay mất điểm (đọc p-value, kết luận H₀, dấu hệ số)' },
+        { id:'2026-12-20-T', slot:'Tối', time:'20:30–22:00', hrs:1.5, subj:'MKT', core:true, text:'Đọc kỹ lại toàn bộ sơ đồ 4P, STP, hành vi khách hàng' }
+      ]},
+      { date:'2026-12-21', dow:'Thứ 2', week:'GĐ 2 · Cao điểm 5 môn liên tiếp (15/12 – 25/12)', phase:2, busy:true, sessions:[
+        { id:'2026-12-21-S', slot:'Sáng', time:'08:00–10:30', hrs:2.5, subj:'KTL', core:true, text:'Tổng duyệt Đề cuối + Kiểm tra thao tác máy tính Casio' },
+        { id:'2026-12-21-C', slot:'Chiều', time:'15:30–18:00', hrs:2.5, subj:'KTL', core:true, text:'Chốt bảng kiểm định 3 khuyết tật mô hình' }
+      ]},
+      { date:'2026-12-22', dow:'Thứ 3', week:'GĐ 2 · Cao điểm 5 môn liên tiếp (15/12 – 25/12)', phase:2, busy:false, exams:['KTL'], sessions:[
+        { id:'2026-12-22-S', slot:'Sáng', time:'08:00–10:00', hrs:2, subj:'KTL', text:'Rà lại tờ công thức 1 trang A4, kiểm tra pin Casio' },
+        { id:'2026-12-22-E', slot:'THI', time:'13:00–14:40', hrs:0, subj:'KTL', isExam:true, core:true, text:'THI KINH TẾ LƯỢNG — Phòng 2B32 (Cơ sở MN)' },
+        { id:'2026-12-22-T', slot:'Tối', time:'20:30–22:00', hrs:1.5, subj:'KT', core:true, text:'Tổng ôn Kế toán: rà toàn bộ 20 tài khoản & định khoản lõi' }
+      ]},
+      { date:'2026-12-23', dow:'Thứ 4', week:'GĐ 2 · Cao điểm 5 môn liên tiếp (15/12 – 25/12)', phase:2, busy:true, sessions:[
+        { id:'2026-12-23-S', slot:'Sáng', time:'08:00–10:30', hrs:2.5, subj:'KT', core:true, text:'Bấm giờ giải full 1 đề tổng hợp (cân số liệu báo cáo)' },
+        { id:'2026-12-23-C', slot:'Chiều', time:'15:30–18:00', hrs:2.5, subj:'KT', core:true, text:'Giải thêm 1 đề + rà FIFO/bình quân, khấu hao, kết chuyển 911' }
+      ]},
+      { date:'2026-12-24', dow:'Thứ 5', week:'GĐ 2 · Cao điểm 5 môn liên tiếp (15/12 – 25/12)', phase:2, busy:false, exams:['KT'], sessions:[
+        { id:'2026-12-24-E', slot:'THI', time:'09:30–11:10', hrs:0, subj:'KT', isExam:true, core:true, text:'THI KẾ TOÁN CHO KINH DOANH — Phòng 2A16 (Cơ sở MN)' },
+        { id:'2026-12-24-C', slot:'Chiều', time:'15:30–17:30', hrs:2, subj:'MKT', core:true, text:'Tổng ôn toàn bộ STP + 4P + cấu trúc trả lời tự luận' },
+        { id:'2026-12-24-T', slot:'Tối', time:'20:30–22:30', hrs:2, subj:'MKT', core:true, text:'Giải nhanh 2 đề mẫu + ví dụ DN → Ngủ đúng 22:30 (sáng thi 7h30!)' }
+      ]},
+      { date:'2026-12-25', dow:'Thứ 6', week:'GĐ 2 · Cao điểm 5 môn liên tiếp (15/12 – 25/12)', phase:2, busy:true, exams:['MKT'], sessions:[
+        { id:'2026-12-25-E', slot:'THI', time:'07:30–09:10', hrs:0, subj:'MKT', isExam:true, core:true, text:'THI QUẢN TRỊ MARKETING — Phòng 2B34 (MN) · Xong tuần tử thần!' },
+        { id:'2026-12-25-C', slot:'Chiều', time:'15:30–18:00', hrs:2.5, subj:'VB', text:'Đọc đề cương & phân loại 5 mẫu văn bản hành chính lõi' }
+      ]},
+
+      // PHASE 3: Final Stretch (26/12 - 07/01)
+      { date:'2026-12-26', dow:'Thứ 7', week:'GĐ 3 · Về đích trọn vẹn 3 môn cuối (26/12 – 07/01)', phase:3, busy:false, sessions:[
+        { id:'2026-12-26-S', slot:'Sáng', time:'08:00–10:00', hrs:2, subj:'VB', core:true, text:'Thể thức & kỹ thuật trình bày văn bản (Nghị định 30/2020)' },
+        { id:'2026-12-26-C', slot:'Chiều', time:'15:30–17:00', hrs:1.5, subj:'VB', core:true, text:'Thực hành viết tay mẫu Công văn & Tờ trình' },
+        { id:'2026-12-26-T', slot:'Tối', time:'20:30–22:00', hrs:1.5, subj:'QTH', text:'Đọc khung Chương 1–2 (Tổng quan & Lịch sử lý thuyết quản trị)' }
+      ]},
+      { date:'2026-12-27', dow:'Chủ Nhật', week:'GĐ 3 · Về đích trọn vẹn 3 môn cuối (26/12 – 07/01)', phase:3, busy:false, sessions:[
+        { id:'2026-12-27-S', slot:'Sáng', time:'08:00–10:00', hrs:2, subj:'VB', core:true, text:'Thực hành viết tay mẫu Quyết định, Báo cáo, Biên bản' },
+        { id:'2026-12-27-C', slot:'Chiều', time:'15:30–17:00', hrs:1.5, subj:'VB', text:'Lý thuyết quy trình soạn thảo & văn phong hành chính' },
+        { id:'2026-12-27-T', slot:'Tối', time:'20:30–22:00', hrs:1.5, subj:'QTH', text:'Chương 3–4 (Môi trường quản trị & Ra quyết định)' }
+      ]},
+      { date:'2026-12-28', dow:'Thứ 2', week:'GĐ 3 · Về đích trọn vẹn 3 môn cuối (26/12 – 07/01)', phase:3, busy:true, sessions:[
+        { id:'2026-12-28-S', slot:'Sáng', time:'08:00–10:30', hrs:2.5, subj:'VB', core:true, text:'Bấm giờ thi thử 1 đề hoàn chỉnh (soi từng chi tiết thể thức)' },
+        { id:'2026-12-28-C', slot:'Chiều', time:'15:30–18:00', hrs:2.5, subj:'VB', text:'Soát lại quy cách đánh số, quốc hiệu, nơi nhận, ký tên' }
+      ]},
+      { date:'2026-12-29', dow:'Thứ 3', week:'GĐ 3 · Về đích trọn vẹn 3 môn cuối (26/12 – 07/01)', phase:3, busy:false, exams:['VB'], sessions:[
+        { id:'2026-12-29-S', slot:'Sáng', time:'08:00–10:00', hrs:2, subj:'VB', text:'Đọc checklist lỗi sai thể thức văn bản' },
+        { id:'2026-12-29-E', slot:'THI', time:'14:45–16:25', hrs:0, subj:'VB', isExam:true, core:true, text:'THI KỸ NĂNG TẠO LẬP VĂN BẢN — Phòng 2A33 (Cơ sở MN)' },
+        { id:'2026-12-29-T', slot:'Tối', time:'20:30–22:00', hrs:1.5, subj:'QTH', text:'Hệ thống lại Chương 1–4 thành sơ đồ ý chính' }
+      ]},
+      { date:'2026-12-30', dow:'Thứ 4', week:'GĐ 3 · Về đích trọn vẹn 3 môn cuối (26/12 – 07/01)', phase:3, busy:true, sessions:[
+        { id:'2026-12-30-S', slot:'Sáng', time:'08:00–10:30', hrs:2.5, subj:'QTH', core:true, text:'Chức năng Hoạch định (MBO, SWOT, chiến lược cạnh tranh)' },
+        { id:'2026-12-30-C', slot:'Chiều', time:'15:30–18:00', hrs:2.5, subj:'QTH', core:true, text:'Chức năng Tổ chức (Cơ cấu tổ chức, phân quyền, tầm hạn)' }
+      ]},
+      { date:'2026-12-31', dow:'Thứ 5', week:'GĐ 3 · Về đích trọn vẹn 3 môn cuối (26/12 – 07/01)', phase:3, busy:false, sessions:[
+        { id:'2026-12-31-S', slot:'Sáng', time:'08:00–10:00', hrs:2, subj:'QTH', core:true, text:'Chức năng Lãnh đạo (Maslow, Herzberg, phong cách lãnh đạo)' },
+        { id:'2026-12-31-C', slot:'Chiều', time:'15:30–17:00', hrs:1.5, subj:'QTH', core:true, text:'Chức năng Kiểm soát (Quy trình & hình thức kiểm soát)' },
+        { id:'2026-12-31-T', slot:'Tối', time:'Nghỉ lễ', hrs:0, subj:'GEN', text:'Nghỉ xả hơi Giao thừa Tết Dương lịch 🎉' }
+      ]},
+      { date:'2027-01-01', dow:'Thứ 6', week:'GĐ 3 · Về đích trọn vẹn 3 môn cuối (26/12 – 07/01)', phase:3, busy:true, sessions:[
+        { id:'2027-01-01-S', slot:'Sáng', time:'09:00–10:30', hrs:1.5, subj:'GEN', text:'Ngủ bù sáng Mùng 1 (hoặc ôn nhẹ sơ đồ Quản trị học)' },
+        { id:'2027-01-01-C', slot:'Chiều', time:'15:30–18:00', hrs:2.5, subj:'QTH', core:true, text:'Tổng hợp đề cương & luyện phân tích tình huống quản trị' }
+      ]},
+      { date:'2027-01-02', dow:'Thứ 7', week:'GĐ 3 · Về đích trọn vẹn 3 môn cuối (26/12 – 07/01)', phase:3, busy:false, sessions:[
+        { id:'2027-01-02-S', slot:'Sáng', time:'08:00–10:00', hrs:2, subj:'QTH', core:true, text:'Học thuộc khung ý 4 chức năng + so sánh các học thuyết' },
+        { id:'2027-01-02-C', slot:'Chiều', time:'15:30–17:00', hrs:1.5, subj:'LVN', core:true, text:'5 giai đoạn Tuckman & vai trò nhóm Belbin' },
+        { id:'2027-01-02-T', slot:'Tối', time:'20:30–22:00', hrs:1.5, subj:'QTH', text:'Luyện trả lời câu hỏi tình huống thực tế doanh nghiệp' }
+      ]},
+      { date:'2027-01-03', dow:'Chủ Nhật', week:'GĐ 3 · Về đích trọn vẹn 3 môn cuối (26/12 – 07/01)', phase:3, busy:false, sessions:[
+        { id:'2027-01-03-S', slot:'Sáng', time:'08:00–10:00', hrs:2, subj:'QTH', core:true, text:'Bấm giờ làm Đề mẫu #1 Quản trị học' },
+        { id:'2027-01-03-C', slot:'Chiều', time:'15:30–17:00', hrs:1.5, subj:'LVN', core:true, text:'5 phong cách xử lý xung đột (Thomas-Kilmann) & Groupthink' },
+        { id:'2027-01-03-T', slot:'Tối', time:'20:30–22:00', hrs:1.5, subj:'LVN', text:'Lập sơ đồ tư duy toàn môn Kỹ năng làm việc nhóm (1–2 trang)' }
+      ]},
+      { date:'2027-01-04', dow:'Thứ 2', week:'GĐ 3 · Về đích trọn vẹn 3 môn cuối (26/12 – 07/01)', phase:3, busy:true, sessions:[
+        { id:'2027-01-04-S', slot:'Sáng', time:'08:00–10:30', hrs:2.5, subj:'QTH', text:'Chữa Đề #1 + học kỹ phần lý thuyết dễ mất điểm' },
+        { id:'2027-01-04-C', slot:'Chiều', time:'15:30–18:00', hrs:2.5, subj:'LVN', core:true, text:'Luyện tình huống xử lý mâu thuẫn & thành viên ỷ lại' }
+      ]},
+      { date:'2027-01-05', dow:'Thứ 3', week:'GĐ 3 · Về đích trọn vẹn 3 môn cuối (26/12 – 07/01)', phase:3, busy:false, sessions:[
+        { id:'2027-01-05-S', slot:'Sáng', time:'08:00–10:00', hrs:2, subj:'QTH', core:true, text:'Bấm giờ làm Đề mẫu #2 Quản trị học' },
+        { id:'2027-01-05-C', slot:'Chiều', time:'15:30–17:00', hrs:1.5, subj:'LVN', text:'Giải thử 1 đề hoàn chỉnh Kỹ năng làm việc nhóm' },
+        { id:'2027-01-05-T', slot:'Tối', time:'20:30–22:00', hrs:1.5, subj:'QTH', text:'Tổng ôn song song: tự trả bài không nhìn tài liệu cả 2 môn' }
+      ]},
+      { date:'2027-01-06', dow:'Thứ 4', week:'GĐ 3 · Về đích trọn vẹn 3 môn cuối (26/12 – 07/01)', phase:3, busy:true, sessions:[
+        { id:'2027-01-06-S', slot:'Sáng', time:'08:00–10:30', hrs:2.5, subj:'QTH', core:true, text:'Chốt toàn bộ dàn ý Quản trị học + ví dụ minh họa' },
+        { id:'2027-01-06-C', slot:'Chiều', time:'15:30–18:00', hrs:2.5, subj:'LVN', core:true, text:'Chốt dàn ý Làm việc nhóm + tên mô hình tiếng Anh' }
+      ]},
+      { date:'2027-01-07', dow:'Thứ 5', week:'GĐ 3 · Về đích trọn vẹn 3 môn cuối (26/12 – 07/01)', phase:3, busy:false, exams:['QTH','LVN'], sessions:[
+        { id:'2027-01-07-E1', slot:'THI 1', time:'09:30–11:10', hrs:0, subj:'QTH', isExam:true, core:true, text:'THI QUẢN TRỊ HỌC — Phòng 2A16 (Cơ sở MN)' },
+        { id:'2027-01-07-E2', slot:'THI 2', time:'13:00–14:40', hrs:0, subj:'LVN', isExam:true, core:true, text:'THI KỸ NĂNG LÀM VIỆC NHÓM — Phòng 2B03 (MN) · CHỐT GPA 4.0! 🏆' }
+      ]}
+    ];
+
+    const STORAGE_KEY = 'gpa_4_0_plan_checked_v1';
+    const PARETO_KEY = 'gpa_4_0_pareto_v1';
+    const SIM_KEY = 'gpa_4_0_sim_v2';
+    const GRAD_KEY = 'gpa_4_0_grad_theme_v1';
+    const THEME_KEY = 'gpa_4_0_darklight_v1';
+
+    let checkedMap = {}, paretoMap = {}, simGrades = {};
+    let simWeights = [10, 20, 70];
+
+    try { checkedMap = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch {}
+    try { paretoMap = JSON.parse(localStorage.getItem(PARETO_KEY) || '{}'); } catch {}
+    try { simGrades = JSON.parse(localStorage.getItem(SIM_KEY) || '{}'); } catch {}
+    try {
+      const g = localStorage.getItem(GRAD_KEY); if (g) document.body.dataset.grad = g;
+      const th = localStorage.getItem(THEME_KEY); if (th) document.documentElement.dataset.theme = th;
+    } catch {}
+
+    EXAM_ORDER.forEach(k => { if (!simGrades[k]) simGrades[k] = { cc: 10, gk: 8.5, ck: 8.8 }; });
+
+    let currentTab = 'schedule';
+    let layoutMode = 'bento';
+    let filterPhase = 'all';
+    let filterSubject = 'ALL';
+    let searchQuery = '';
+    let onlyPareto = false;
+    let onlyPending = false;
+    let onlyExams = false;
+    let activeMonth = '2026-11';
+    let selectedCalDate = '2026-11-21';
+
+    const saveChecked = () => { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(checkedMap)); } catch {} };
+    const savePareto = () => { try { localStorage.setItem(PARETO_KEY, JSON.stringify(paretoMap)); } catch {} };
+    const saveSim = () => { try { localStorage.setItem(SIM_KEY, JSON.stringify(simGrades)); } catch {} };
+    const fmtDateVN = iso => { const [, m, d] = iso.split('-'); return `${d}/${m}`; };
+
+    // Theme & Gradient Switchers
+    function syncThemeBtn() {
+      const isDark = document.documentElement.dataset.theme !== 'light';
+      document.getElementById('btnToggleTheme').textContent = isDark ? '☾ Dark' : '☀ Light';
+    }
+    document.getElementById('btnToggleTheme').addEventListener('click', () => {
+      const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+      document.documentElement.dataset.theme = next;
+      try { localStorage.setItem(THEME_KEY, next); } catch {}
+      syncThemeBtn();
+    });
+
+    function syncGradSwatches() {
+      const active = document.body.dataset.grad || 'aurora';
+      document.querySelectorAll('.grad-swatch').forEach(b => {
+        const act = b.dataset.setgrad === active;
+        b.classList.toggle('chip-active', act);
+        b.classList.toggle('muted-txt', !act);
+      });
+    }
+    document.querySelectorAll('.grad-swatch').forEach(b => {
+      b.addEventListener('click', () => {
+        document.body.dataset.grad = b.dataset.setgrad;
+        try { localStorage.setItem(GRAD_KEY, b.dataset.setgrad); } catch {}
+        syncGradSwatches();
+        showToast(`Đã đổi dải màu sang ${b.textContent.trim()} ✨`, 'linear-gradient(135deg, var(--g1), var(--g4))');
+      });
+    });
+
+    function showToast(msg, bg = 'linear-gradient(135deg, var(--g1), var(--g3))') {
+      const root = document.getElementById('toastRoot');
+      const el = document.createElement('div');
+      el.className = 'toast-enter glass-panel rounded-xl px-4 py-2.5 text-xs font-semibold flex items-center gap-2.5 shadow-xl pointer-events-auto';
+      el.innerHTML = `<span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:${bg}"></span><span>${msg}</span>`;
+      root.appendChild(el);
+      setTimeout(() => {
+        el.style.transition = 'opacity 0.3s, transform 0.3s';
+        el.style.opacity = '0'; el.style.transform = 'translateY(8px)';
+        setTimeout(() => el.remove(), 320);
+      }, 2400);
+    }
+
+    function fireSparks() {
+      const canvas = document.getElementById('fxCanvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+      const colors = ['#06b6d4', '#6366f1', '#a855f7', '#ec4899', '#10b981', '#f59e0b'];
+      const particles = Array.from({ length: 48 }, () => ({
+        x: window.innerWidth * (0.35 + Math.random() * 0.3),
+        y: window.innerHeight * 0.32,
+        vx: (Math.random() - 0.5) * 11, vy: -Math.random() * 9 - 3,
+        size: Math.random() * 5.5 + 3,
+        color: colors[Math.floor(Math.random() * colors.length)], life: 1
+      }));
+      function frame() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let alive = false;
+        particles.forEach(p => {
+          if (p.life <= 0) return;
+          alive = true; p.x += p.vx; p.y += p.vy; p.vy += 0.24; p.life -= 0.022;
+          ctx.globalAlpha = Math.max(0, p.life); ctx.fillStyle = p.color;
+          ctx.fillRect(p.x, p.y, p.size, p.size * 0.65);
+        });
+        if (alive) requestAnimationFrame(frame);
+        else ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+      requestAnimationFrame(frame);
+    }
+
+    function computeStats() {
+      let totalSess = 0, doneSess = 0, totalHrs = 0, doneHrs = 0, examsDone = 0, daysDone = 0;
+      const bySubj = {};
+      EXAM_ORDER.forEach(k => { bySubj[k] = { totalHrs: 0, doneHrs: 0, totalSess: 0, doneSess: 0 }; });
+
+      SCHEDULE.forEach(day => {
+        let dayStudy = 0, dayStudyDone = 0;
+        day.sessions.forEach(s => {
+          if (s.isExam && checkedMap[s.id]) examsDone++;
+          if (s.hrs > 0) {
+            totalSess++; totalHrs += s.hrs; dayStudy++;
+            if (bySubj[s.subj]) { bySubj[s.subj].totalHrs += s.hrs; bySubj[s.subj].totalSess++; }
+            if (checkedMap[s.id]) {
+              doneSess++; doneHrs += s.hrs; dayStudyDone++;
+              if (bySubj[s.subj]) { bySubj[s.subj].doneHrs += s.hrs; bySubj[s.subj].doneSess++; }
+            }
+          }
+        });
+        if (dayStudy > 0 && dayStudy === dayStudyDone) daysDone++;
+        else if (dayStudy === 0 && day.sessions.every(s => checkedMap[s.id])) daysDone++;
+      });
+
+      let paretoTotal = 0, paretoDone = 0;
+      EXAM_ORDER.forEach(k => {
+        PARETO_CORE[k].forEach(it => { paretoTotal++; if (paretoMap[it.id]) paretoDone++; });
+      });
+
+      return { totalSess, doneSess, totalHrs, doneHrs, examsDone, daysDone, bySubj, paretoTotal, paretoDone };
+    }
+
+    function findSessionById(sid) {
+      for (const d of SCHEDULE) for (const s of d.sessions) if (s.id === sid) return { day: d, sess: s };
+      return null;
+    }
+
+    function toggleSession(sid) {
+      const info = findSessionById(sid);
+      const was = !!checkedMap[sid];
+      if (was) delete checkedMap[sid]; else checkedMap[sid] = true;
+      saveChecked();
+      if (!was && info) {
+        const subj = SUBJECTS[info.sess.subj];
+        if (info.sess.isExam) { fireSparks(); showToast(`Xong bài thi ${subj.short}! 🏆`, 'linear-gradient(135deg,#10b981,#06b6d4)'); }
+        else {
+          const studyInDay = info.day.sessions.filter(s => s.hrs > 0);
+          if (studyInDay.length && studyInDay.every(s => checkedMap[s.id])) {
+            fireSparks(); showToast(`Hoàn thành 100% ngày ${fmtDateVN(info.day.date)}! 🔥`, 'linear-gradient(135deg,#10b981,#06b6d4)');
+          } else showToast(`Chốt ca ${info.sess.slot} · ${subj.short} (+${info.sess.hrs}h)`, subj.grad);
+        }
+      }
+      updateAllViews();
+    }
+
+    function toggleParetoItem(pid) {
+      const was = !!paretoMap[pid];
+      if (was) delete paretoMap[pid]; else paretoMap[pid] = true;
+      savePareto();
+      if (!was) showToast('Đã khóa thêm 1 điểm lõi 20/80! ⚡', 'linear-gradient(135deg,#f59e0b,#ec4899)');
+      updateAllViews();
+    }
+
+    function renderHUD() {
+      const st = computeStats();
+      const pct = st.totalSess ? Math.round((st.doneSess / st.totalSess) * 100) : 0;
+      const pPct = st.paretoTotal ? (st.paretoDone / st.paretoTotal) : 0;
+
+      document.getElementById('hudPercent').textContent = `${pct}%`;
+      document.getElementById('hudHoursDone').textContent = st.doneHrs.toFixed(1).replace(/\.0$/, '');
+      document.getElementById('hudHoursTotal').textContent = st.totalHrs.toFixed(1).replace(/\.0$/, '');
+      document.getElementById('hudParetoDone').textContent = `${st.paretoDone}/${st.paretoTotal}`;
+      document.getElementById('hudExams').textContent = `${st.examsDone}/8`;
+
+      document.getElementById('ringSessions').style.strokeDashoffset = 314.16 * (1 - pct / 100);
+      document.getElementById('ringPareto').style.strokeDashoffset = 232.48 * (1 - pPct);
+
+      document.getElementById('teleDaysDone').textContent = `${st.daysDone} / ${SCHEDULE.length} ngày`;
+      document.getElementById('teleDaysBar').style.width = `${Math.round((st.daysDone / SCHEDULE.length) * 100)}%`;
+
+      let next = null;
+      for (const d of SCHEDULE) {
+        const ex = d.sessions.find(s => s.isExam && !checkedMap[s.id]);
+        if (ex) { next = { day: d, sess: ex, subj: SUBJECTS[ex.subj] }; break; }
+      }
+      if (next) {
+        document.getElementById('teleNextExam').textContent = next.subj.name;
+        document.getElementById('teleNextMeta').textContent = `${next.day.dow} ${fmtDateVN(next.day.date)} · ${next.subj.examTime} · P.${next.subj.room}`;
+        document.getElementById('teleNextCredits').textContent = `${next.subj.credits} TC`;
+      } else {
+        document.getElementById('teleNextExam').textContent = 'HOÀN TẤT TOÀN BỘ 8 MÔN!';
+        document.getElementById('teleNextMeta').textContent = 'Chốt GPA 4.0 thành công 🏆';
+        document.getElementById('teleNextCredits').textContent = '4.00';
+      }
+    }
+
+    function renderParetoTab() {
+      const st = computeStats();
+      const pct = st.paretoTotal ? Math.round((st.paretoDone / st.paretoTotal) * 100) : 0;
+      document.getElementById('paretoPctBig').textContent = `${pct}%`;
+      document.getElementById('paretoCountSub').textContent = `${st.paretoDone} / ${st.paretoTotal} mục lõi`;
+
+      const priorityOrder = ['TA', 'KTL', 'KT', 'QTH', 'KTCT', 'MKT', 'VB', 'LVN'];
+      document.getElementById('paretoGrid').innerHTML = priorityOrder.map(k => {
+        const s = SUBJECTS[k];
+        const items = PARETO_CORE[k];
+        const doneCnt = items.filter(it => paretoMap[it.id]).length;
+        const allDone = doneCnt === items.length;
+        const tierBadge = s.credits >= 3
+          ? `<span class="grad-pareto px-2 py-0.5 rounded-md text-xs font-mono font-bold">TIER 1 · ${s.credits} TC</span>`
+          : `<span class="glass-sub px-2 py-0.5 rounded-md text-xs font-mono muted-txt">${s.credits} TC</span>`;
+
+        return `
+          <div class="glass-card rounded-2xl p-4 pt-5 space-y-3 ${allDone ? 'day-done-glow' : ''}">
+            <div class="absolute top-0 left-0 right-0 h-1" style="background:${s.grad};"></div>
+            <div class="flex items-start justify-between gap-2 pb-2 border-b" style="border-color:var(--border-soft);">
+              <div>
+                <div class="flex flex-wrap items-center gap-1.5">
+                  <span class="font-display text-sm font-bold">${s.name}</span>
+                  ${tierBadge}
+                </div>
+                <div class="text-xs muted-txt font-mono mt-0.5">Thi ${fmtDateVN(s.examDate)} (${s.examTime}) · P.${s.room}</div>
+              </div>
+              <span class="text-xs font-mono font-bold px-2 py-1 rounded-lg ${allDone ? 'grad-ok' : 'glass-sub muted-txt'}">${doneCnt}/${items.length}</span>
+            </div>
+            <div class="space-y-2">
+              ${items.map(it => {
+                const done = !!paretoMap[it.id];
+                return `
+                  <div data-pid="${it.id}" class="pareto-row session-row glass-sub rounded-xl p-2.5 flex items-start gap-2.5 cursor-pointer ${done ? 'is-done' : ''}">
+                    <div class="neo-check mt-0.5 ${done ? 'checked' : ''}">
+                      ${done ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>' : ''}
+                    </div>
+                    <div class="session-text text-xs leading-relaxed">${it.text}</div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      document.querySelectorAll('.pareto-row').forEach(row => {
+        row.addEventListener('click', () => toggleParetoItem(row.dataset.pid));
+      });
+    }
+
+    function renderSubjectFilters() {
+      const st = computeStats();
+      const container = document.getElementById('subjectFilterBar');
+      const pills = [{ id:'ALL', short:'Tất cả môn', grad:'linear-gradient(135deg, var(--g1), var(--g3))' }, ...EXAM_ORDER.map(k => SUBJECTS[k])];
+      container.innerHTML = pills.map(s => {
+        const active = filterSubject === s.id;
+        const countTag = s.id !== 'ALL' ? `<span class="opacity-75 font-mono">${st.bySubj[s.id].doneSess}/${st.bySubj[s.id].totalSess}</span>` : '';
+        const styleAttr = active
+          ? `background:${s.grad}; color:#ffffff; border-color:transparent; box-shadow:0 4px 14px -4px ${s.c1 || 'var(--g2)'};`
+          : `border-color:var(--border);`;
+        return `
+          <button data-subj="${s.id}" style="${styleAttr}" class="subj-chip px-2.5 py-1.5 rounded-xl text-xs font-semibold border cursor-pointer transition inline-flex items-center gap-1.5 ${active ? '' : 'glass-sub muted-txt'}">
+            ${s.id !== 'ALL' && !active ? `<span class="w-2.5 h-2.5 rounded-full" style="background:${s.grad}"></span>` : ''}
+            <span>${s.short}</span>${countTag}
+          </button>
+        `;
+      }).join('');
+      container.querySelectorAll('.subj-chip').forEach(btn => {
+        btn.addEventListener('click', () => { filterSubject = btn.dataset.subj; renderSubjectFilters(); renderSchedule(); });
+      });
+    }
+
+    function buildDayCardHTML(day) {
+      const visibleSessions = onlyPareto ? day.sessions.filter(s => s.core || s.isExam) : day.sessions;
+      const studySess = day.sessions.filter(s => s.hrs > 0);
+      const doneCnt = studySess.filter(s => checkedMap[s.id]).length;
+      const allDone = studySess.length > 0 && doneCnt === studySess.length;
+      const hasExam = day.exams && day.exams.length > 0;
+      const totalDayHrs = studySess.reduce((a, b) => a + b.hrs, 0);
+
+      const topGrad = hasExam
+        ? 'linear-gradient(90deg, #f43f5e, #ec4899, #f97316)'
+        : allDone
+          ? 'linear-gradient(90deg, #10b981, #06b6d4)'
+          : (() => {
+              const cols = day.sessions.map(s => SUBJECTS[s.subj].c1);
+              return cols.length >= 2 ? `linear-gradient(90deg, ${cols[0]}, ${cols[cols.length - 1]})` : SUBJECTS[day.sessions[0].subj].grad;
+            })();
+
+      const sessionsHTML = visibleSessions.map(s => {
+        const subj = SUBJECTS[s.subj];
+        const done = !!checkedMap[s.id];
+
+        if (s.isExam) {
+          return `
+            <div class="session-row rounded-xl p-3 flex items-start gap-3 cursor-pointer ${done ? 'is-done' : ''}"
+                 style="background: linear-gradient(135deg, color-mix(in srgb, #f43f5e 18%, var(--surface-2)), color-mix(in srgb, #f97316 12%, var(--surface-2))); border: 1px solid color-mix(in srgb, #f43f5e 55%, transparent);"
+                 data-toggle-sid="${s.id}">
+              <div class="neo-check exam-check mt-0.5 ${done ? 'checked' : ''}">
+                ${done ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>' : ''}
+              </div>
+              <div class="flex-1 min-w-0 space-y-1">
+                <div class="flex items-center justify-between gap-2 text-xs">
+                  <span class="font-mono font-bold inline-flex items-center gap-1.5" style="color:#f43f5e;">
+                    <span class="beacon-dot"></span>${s.slot} · ${s.time}
+                  </span>
+                  <span class="grad-hot px-2 py-0.5 rounded-md font-mono font-bold text-xs">EXAM</span>
+                </div>
+                <div class="session-text text-xs font-bold leading-snug">${s.text}</div>
+              </div>
+            </div>
+          `;
+        }
+
+        return `
+          <div class="session-row glass-sub rounded-xl p-2.5 flex items-start gap-2.5 cursor-pointer group ${done ? 'is-done' : ''}" data-toggle-sid="${s.id}">
+            <div class="neo-check mt-0.5 ${done ? 'checked' : ''}">
+              ${done ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>' : ''}
+            </div>
+            <div class="flex-1 min-w-0 space-y-1">
+              <div class="flex items-center justify-between gap-2 text-xs">
+                <span class="font-mono muted-txt">${s.slot} · ${s.time}</span>
+                <div class="flex items-center gap-1 shrink-0">
+                  ${s.core ? `<span class="grad-pareto px-1.5 py-0.5 rounded font-mono text-xs font-bold" title="Ca 20/80 trọng tâm ăn 80% điểm">20/80</span>` : ''}
+                  <span class="inline-flex items-center px-2 py-0.5 rounded-md font-bold text-xs text-white" style="background:${subj.grad};">${subj.short}</span>
+                  ${s.hrs > 0 ? `<button data-focus-sid="${s.id}" title="Bật Pomodoro" class="focus-launch-btn px-1.5 py-0.5 rounded-md text-xs font-mono muted-txt hover:text-white cursor-pointer transition">▶</button>` : ''}
+                </div>
+              </div>
+              <div class="session-text text-xs leading-relaxed">${s.text}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      return `
+        <article id="day-${day.date}" class="glass-card rounded-2xl p-4 pt-5 space-y-3 ${hasExam ? 'exam-card-glow' : allDone ? 'day-done-glow' : ''}">
+          <div class="absolute top-0 left-0 right-0 h-1" style="background:${topGrad};"></div>
+          <div class="flex items-center justify-between gap-2 pb-2.5 border-b" style="border-color:var(--border-soft);">
+            <div>
+              <div class="flex flex-wrap items-center gap-1.5">
+                <span class="font-display text-sm font-bold tracking-tight">${day.dow}, ${fmtDateVN(day.date)}</span>
+                ${hasExam ? `<span class="grad-hot px-2 py-0.5 rounded-md text-xs font-mono font-bold">NGÀY THI</span>` : ''}
+                ${day.busy ? `<span class="px-2 py-0.5 rounded-md text-xs font-mono font-semibold" style="background: color-mix(in srgb, #f59e0b 18%, transparent); color:#f59e0b;">Bận 20h–22h</span>` : ''}
+              </div>
+              <div class="text-xs muted-txt font-mono mt-0.5">
+                GĐ ${day.phase} · ${totalDayHrs}h ${allDone ? '· <span style="color:var(--g-ok1)" class="font-bold">XONG ✓</span>' : ''}
+              </div>
+            </div>
+            <div class="text-xs font-mono font-bold px-2.5 py-1 rounded-lg tabular-nums ${allDone ? 'grad-ok' : 'glass-sub muted-txt'}">
+              ${doneCnt}/${studySess.length}
+            </div>
+          </div>
+          <div class="space-y-2">${sessionsHTML}</div>
+        </article>
+      `;
+    }
+
+    function bindSessionInteractions(container) {
+      container.querySelectorAll('[data-toggle-sid]').forEach(row => {
+        row.addEventListener('click', e => {
+          if (e.target.closest('.focus-launch-btn')) return;
+          toggleSession(row.dataset.toggleSid);
+        });
+      });
+      container.querySelectorAll('.focus-launch-btn').forEach(btn => {
+        btn.addEventListener('click', e => { e.stopPropagation(); launchFocusForSession(btn.dataset.focusSid); });
+      });
+    }
+
+    function renderSchedule() {
+      const root = document.getElementById('scheduleRoot');
+      const q = searchQuery.trim().toLowerCase();
+
+      const filtered = SCHEDULE.filter(day => {
+        if (filterPhase !== 'all' && String(day.phase) !== filterPhase) return false;
+        if (onlyExams && !(day.exams && day.exams.length)) return false;
+        if (onlyPareto && !day.sessions.some(s => s.core || s.isExam)) return false;
+        if (filterSubject !== 'ALL' && !day.sessions.some(s => s.subj === filterSubject)) return false;
+        if (onlyPending && !day.sessions.some(s => s.hrs > 0 && !checkedMap[s.id])) return false;
+        if (q) {
+          const hay = `${day.date} ${fmtDateVN(day.date)} ${day.dow} ${day.sessions.map(s => s.text + ' ' + SUBJECTS[s.subj].name).join(' ')}`.toLowerCase();
+          if (!hay.includes(q)) return false;
+        }
+        return true;
+      });
+
+      if (!filtered.length) {
+        root.innerHTML = `<div class="glass-panel rounded-2xl p-10 text-center text-sm muted-txt">Không có ngày học nào khớp bộ lọc hiện tại.</div>`;
+        return;
+      }
+
+      if (layoutMode === 'bento') {
+        root.innerHTML = `<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">${filtered.map(buildDayCardHTML).join('')}</div>`;
+      } else {
+        const groups = [];
+        filtered.forEach(d => {
+          let g = groups.find(x => x.title === d.week);
+          if (!g) { g = { title: d.week, days: [] }; groups.push(g); }
+          g.days.push(d);
+        });
+        root.innerHTML = groups.map(g => `
+          <div class="mb-6 space-y-3">
+            <div class="flex items-center gap-3">
+              <span class="px-3.5 py-1 rounded-full text-xs font-mono font-bold text-white" style="background: linear-gradient(135deg, var(--g1), var(--g2), var(--g3));">${g.title}</span>
+              <div class="flex-1 h-px" style="background: linear-gradient(90deg, var(--g2), transparent);"></div>
+              <span class="text-xs font-mono muted-txt">${g.days.length} ngày</span>
+            </div>
+            <div class="timeline-rail pl-10 space-y-3.5">
+              ${g.days.map(d => {
+                const isEx = d.exams && d.exams.length;
+                const dotBg = isEx ? 'linear-gradient(135deg, #f43f5e, #f97316)' : SUBJECTS[d.sessions[0].subj].grad;
+                return `
+                  <div class="relative">
+                    <span class="absolute -left-[31px] top-5 w-4 h-4 rounded-full border-2" style="border-color:var(--bg); background:${dotBg}; box-shadow:0 0 12px ${isEx ? '#f43f5e' : SUBJECTS[d.sessions[0].subj].c1};"></span>
+                    ${buildDayCardHTML(d)}
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        `).join('');
+      }
+      bindSessionInteractions(root);
+    }
+
+    function renderCalendar() {
+      const grid = document.getElementById('calendarGrid');
+      const [yStr, mStr] = activeMonth.split('-');
+      const y = parseInt(yStr, 10), mIdx = parseInt(mStr, 10) - 1;
+      const firstDay = new Date(y, mIdx, 1);
+      const daysInMonth = new Date(y, mIdx + 1, 0).getDate();
+      const offset = (firstDay.getDay() + 6) % 7;
+      const byDate = {}; SCHEDULE.forEach(d => { byDate[d.date] = d; });
+
+      let html = '';
+      for (let i = 0; i < offset; i++) html += `<div class="rounded-xl min-h-[92px] opacity-20 glass-sub"></div>`;
+
+      for (let dn = 1; dn <= daysInMonth; dn++) {
+        const iso = `${yStr}-${mStr}-${String(dn).padStart(2, '0')}`;
+        const plan = byDate[iso];
+        const isSel = selectedCalDate === iso;
+
+        if (!plan) {
+          html += `<div class="rounded-xl p-2 min-h-[92px] glass-sub opacity-40"><div class="text-xs font-mono muted-txt">${dn}</div></div>`;
+          continue;
+        }
+        const studySess = plan.sessions.filter(s => s.hrs > 0);
+        const doneCnt = studySess.filter(s => checkedMap[s.id]).length;
+        const pct = studySess.length ? Math.round((doneCnt / studySess.length) * 100) : 0;
+        const allDone = studySess.length > 0 && doneCnt === studySess.length;
+        const hasExam = plan.exams && plan.exams.length;
+
+        const tags = plan.sessions.slice(0, 3).map(s => {
+          const subj = SUBJECTS[s.subj];
+          if (s.isExam) return `<div class="grad-hot px-1.5 py-0.5 rounded text-xs font-bold truncate">THI ${subj.short}</div>`;
+          return `
+            <div class="flex items-center gap-1 text-xs truncate ${checkedMap[s.id] ? 'opacity-45 line-through' : ''}">
+              <span class="w-2 h-2 rounded-full shrink-0" style="background:${subj.grad}"></span>
+              <span class="truncate">${subj.short}</span>
+            </div>
+          `;
+        }).join('');
+
+        const cellBg = isSel
+          ? 'linear-gradient(145deg, color-mix(in srgb, var(--g1) 22%, var(--surface)), color-mix(in srgb, var(--g3) 18%, var(--surface)))'
+          : hasExam
+            ? 'linear-gradient(145deg, color-mix(in srgb, #f43f5e 16%, var(--surface)), color-mix(in srgb, #f97316 10%, var(--surface)))'
+            : 'color-mix(in srgb, var(--surface) 82%, transparent)';
+        const cellBorder = isSel ? 'var(--g1)' : hasExam ? '#f43f5e' : allDone ? '#10b981' : 'var(--border)';
+
+        html += `
+          <button data-caldate="${iso}" class="cal-cell text-left rounded-xl p-2 min-h-[98px] flex flex-col justify-between gap-1.5 cursor-pointer transition border"
+                  style="background:${cellBg}; border-color:${cellBorder};">
+            <div class="flex items-center justify-between w-full">
+              <span class="text-xs font-mono font-bold">${dn}</span>
+              <div class="flex items-center gap-1">
+                ${plan.busy ? `<span class="w-2 h-2 rounded-full" style="background:#f59e0b" title="Bận 20h-22h"></span>` : ''}
+                ${allDone ? `<span class="w-2 h-2 rounded-full" style="background:linear-gradient(135deg,#10b981,#06b6d4)"></span>` : ''}
+              </div>
+            </div>
+            <div class="space-y-0.5 w-full overflow-hidden">${tags}</div>
+            <div class="w-full h-1.5 rounded-full overflow-hidden" style="background: color-mix(in srgb, var(--muted) 22%, transparent);">
+              <div class="h-full rounded-full" style="width:${pct}%; background:${allDone ? 'linear-gradient(90deg, var(--g-ok1), var(--g-ok2))' : 'linear-gradient(90deg, var(--g1), var(--g3))'};"></div>
+            </div>
+          </button>
+        `;
+      }
+      grid.innerHTML = html;
+      grid.querySelectorAll('.cal-cell').forEach(btn => {
+        btn.addEventListener('click', () => { selectedCalDate = btn.dataset.caldate; renderCalendar(); });
+      });
+
+      const inspector = document.getElementById('calendarInspector');
+      const selPlan = byDate[selectedCalDate] || SCHEDULE.find(d => d.date.startsWith(activeMonth)) || SCHEDULE[0];
+      if (selPlan) { inspector.innerHTML = buildDayCardHTML(selPlan); bindSessionInteractions(inspector); }
+    }
+
+    function renderExamsRadar() {
+      const st = computeStats();
+      const maxHrs = Math.max(...EXAM_ORDER.map(k => st.bySubj[k].totalHrs), 1);
+
+      document.getElementById('subjectRadarGrid').innerHTML = EXAM_ORDER.map(k => {
+        const s = SUBJECTS[k], stat = st.bySubj[k];
+        const pct = stat.totalHrs ? Math.round((stat.doneHrs / stat.totalHrs) * 100) : 0;
+        const c = 125.66;
+        return `
+          <div class="glass-card rounded-2xl p-4 pt-5 space-y-3">
+            <div class="absolute top-0 left-0 right-0 h-1" style="background:${s.grad};"></div>
+            <div class="flex items-center justify-between gap-2">
+              <div class="min-w-0">
+                <div class="text-xs font-mono muted-txt">${s.code} · <strong style="color:var(--fg)">${s.credits} TC</strong></div>
+                <div class="font-display text-sm font-bold truncate mt-0.5">${s.name}</div>
+              </div>
+              <div class="relative w-12 h-12 shrink-0 flex items-center justify-center">
+                <svg class="w-12 h-12 -rotate-90" viewBox="0 0 48 48">
+                  <circle cx="24" cy="24" r="20" fill="none" stroke="color-mix(in srgb, var(--muted) 22%, transparent)" stroke-width="4.5" />
+                  <circle cx="24" cy="24" r="20" fill="none" stroke="${s.svgGrad}" stroke-width="4.5" stroke-linecap="round"
+                          stroke-dasharray="${c}" stroke-dashoffset="${c * (1 - pct / 100)}" />
+                </svg>
+                <span class="absolute text-xs font-mono font-bold">${pct}%</span>
+              </div>
+            </div>
+            <div class="flex items-center justify-between text-xs muted-txt">
+              <span class="font-mono">${stat.doneHrs}/${stat.totalHrs}h ôn</span>
+              <span class="font-mono font-semibold" style="color:var(--fg)">${fmtDateVN(s.examDate)} · ${s.examTime}</span>
+            </div>
+            <button data-jump-subj="${s.id}" class="jump-subj-btn w-full py-1.5 rounded-xl text-xs font-bold text-white cursor-pointer transition hover:opacity-90" style="background:${s.grad};">
+              Xem lịch môn này →
+            </button>
+          </div>
+        `;
+      }).join('');
+
+      document.getElementById('hoursBarChart').innerHTML = EXAM_ORDER.slice()
+        .sort((a, b) => st.bySubj[b].totalHrs - st.bySubj[a].totalHrs)
+        .map(k => {
+          const s = SUBJECTS[k], stat = st.bySubj[k];
+          const totalW = Math.round((stat.totalHrs / maxHrs) * 100);
+          const doneW = stat.totalHrs ? Math.max(5, Math.round((stat.doneHrs / stat.totalHrs) * 100)) : 0;
+          return `
+            <div class="grid grid-cols-12 items-center gap-3 text-xs">
+              <div class="col-span-4 sm:col-span-3 font-semibold truncate flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full shrink-0" style="background:${s.grad}"></span>
+                <span class="truncate">${s.short} (${s.credits} TC)</span>
+              </div>
+              <div class="col-span-6 sm:col-span-7">
+                <div class="h-3.5 rounded-full overflow-hidden p-0.5" style="width:${totalW}%; background: color-mix(in srgb, ${s.c1} 22%, transparent);">
+                  <div class="h-full rounded-full transition-all duration-500" style="width:${stat.doneHrs ? doneW : 100}%; opacity:${stat.doneHrs ? 1 : 0.45}; background:${s.grad};"></div>
+                </div>
+              </div>
+              <div class="col-span-2 text-right font-mono muted-txt">${stat.doneHrs}/${stat.totalHrs}h</div>
+            </div>
+          `;
+        }).join('');
+
+      document.getElementById('examBoardBody').innerHTML = EXAM_ORDER.map(k => {
+        const s = SUBJECTS[k];
+        return `
+          <tr class="transition hover:bg-white/5">
+            <td class="py-3 px-3 font-mono text-xs muted-txt">${s.code}</td>
+            <td class="py-3 px-3 font-semibold"><span class="inline-flex items-center gap-2"><span class="w-3 h-3 rounded-full" style="background:${s.grad}"></span>${s.name}</span></td>
+            <td class="py-3 px-3 text-center font-mono font-bold">${s.credits}</td>
+            <td class="py-3 px-3 font-mono font-semibold">${fmtDateVN(s.examDate)}/${s.examDate.slice(0,4)}</td>
+            <td class="py-3 px-3 text-center font-mono">${s.examTime}</td>
+            <td class="py-3 px-3 text-center"><span class="px-2.5 py-0.5 rounded-md font-mono font-bold text-white" style="background:${s.grad};">${s.room}</span></td>
+            <td class="py-3 px-3 text-xs muted-txt">${s.risk}</td>
+            <td class="py-3 px-3 text-right"><button data-jump-subj="${s.id}" class="jump-subj-btn text-xs font-bold hover:underline cursor-pointer" style="color:${s.c1};">Lọc lịch</button></td>
+          </tr>
+        `;
+      }).join('');
+
+      document.querySelectorAll('.jump-subj-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          filterSubject = btn.dataset.jumpSubj; filterPhase = 'all'; onlyExams = false;
+          switchTab('schedule'); renderSubjectFilters(); renderSchedule();
+        });
+      });
+    }
+
+    function renderGpaSimulator() {
+      const [wCC, wGK, wCK] = simWeights;
+      const body = document.getElementById('gpaSimBody');
+      body.innerHTML = EXAM_ORDER.map(k => {
+        const s = SUBJECTS[k], g = simGrades[k];
+        const needA = (8.5 - (g.cc * wCC + g.gk * wGK) / 100) / (wCK / 100);
+        const avg = (g.cc * wCC + g.gk * wGK + g.ck * wCK) / 100;
+        const isA = avg >= 8.5;
+        const gradeLetter = avg >= 9.0 ? 'A+' : avg >= 8.5 ? 'A' : avg >= 8.0 ? 'B+' : avg >= 7.0 ? 'B' : 'C';
+        const needText = needA <= 0 ? 'Đủ A' : needA > 10 ? '>10!' : needA.toFixed(2);
+        const needColor = needA > 9.2 ? '#f43f5e' : needA > 8.5 ? '#f59e0b' : '#10b981';
+
+        return `
+          <tr>
+            <td class="py-2 pr-2 font-semibold">
+              <div class="flex items-center gap-1.5">
+                <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background:${s.grad}"></span>
+                <span class="truncate max-w-[140px]">${s.short}</span>
+                <span class="muted-txt font-mono">(${s.credits})</span>
+              </div>
+            </td>
+            <td class="py-2 px-1 text-center"><input data-sim="${k}" data-field="cc" type="number" min="0" max="10" step="0.5" value="${g.cc}" class="sim-inp w-14 text-center py-1 rounded-lg glass-sub font-mono text-xs focus:outline-none" style="color:var(--fg);" /></td>
+            <td class="py-2 px-1 text-center"><input data-sim="${k}" data-field="gk" type="number" min="0" max="10" step="0.5" value="${g.gk}" class="sim-inp w-14 text-center py-1 rounded-lg glass-sub font-mono text-xs focus:outline-none" style="color:var(--fg);" /></td>
+            <td class="py-2 px-1.5 text-center font-mono font-bold" style="color:${needColor}">${needText}</td>
+            <td class="py-2 pl-2 text-center"><input data-sim="${k}" data-field="ck" type="number" min="0" max="10" step="0.1" value="${g.ck}" class="sim-inp w-14 text-center py-1 rounded-lg glass-sub font-mono text-xs font-bold focus:outline-none" style="color:var(--fg);" /></td>
+            <td class="py-2 pl-2 text-right font-mono font-bold" style="color:${isA ? '#10b981' : '#f59e0b'}">${gradeLetter} <span class="muted-txt font-normal">(${avg.toFixed(1)})</span></td>
+          </tr>
+        `;
+      }).join('');
+
+      let sumPts = 0, sumCr = 0;
+      EXAM_ORDER.forEach(k => {
+        const s = SUBJECTS[k], g = simGrades[k];
+        const avg = (g.cc * wCC + g.gk * wGK + g.ck * wCK) / 100;
+        const pt = avg >= 8.5 ? 4.0 : avg >= 8.0 ? 3.5 : avg >= 7.0 ? 3.0 : avg >= 6.5 ? 2.5 : avg >= 5.5 ? 2.0 : 1.0;
+        sumPts += pt * s.credits; sumCr += s.credits;
+      });
+      const gpa = (sumPts / sumCr).toFixed(2);
+      document.getElementById('simTotalGpa').textContent = gpa;
+      document.getElementById('hudProjGpa').textContent = gpa;
+
+      body.querySelectorAll('.sim-inp').forEach(inp => {
+        inp.addEventListener('change', () => {
+          simGrades[inp.dataset.sim][inp.dataset.field] = Math.min(10, Math.max(0, parseFloat(inp.value) || 0));
+          saveSim(); renderGpaSimulator();
+        });
+      });
+    }
+
+    // Pomodoro Reactor
+    let pomoTotalSec = 50 * 60, pomoLeftSec = pomoTotalSec, pomoTimer = null, linkedSessionId = null;
+
+    function updatePomoUI() {
+      const m = Math.floor(pomoLeftSec / 60), s = pomoLeftSec % 60;
+      const str = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+      document.getElementById('pomoDisplay').textContent = str;
+      document.getElementById('miniTimerText').textContent = str;
+      document.getElementById('pomoRingArc').style.strokeDashoffset = 540.35 * (pomoTotalSec ? (1 - pomoLeftSec / pomoTotalSec) : 0);
+    }
+
+    function playChime() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        [523.25, 659.25, 783.99].forEach((freq, i) => {
+          const osc = ctx.createOscillator(), g = ctx.createGain();
+          osc.type = 'sine'; osc.frequency.value = freq;
+          g.gain.setValueAtTime(0.09, ctx.currentTime + i * 0.14);
+          g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.14 + 0.45);
+          osc.connect(g); g.connect(ctx.destination);
+          osc.start(ctx.currentTime + i * 0.14); osc.stop(ctx.currentTime + i * 0.14 + 0.46);
+        });
+      } catch {}
+    }
+
+    function launchFocusForSession(sid) {
+      const info = findSessionById(sid); if (!info) return;
+      linkedSessionId = sid;
+      const subj = SUBJECTS[info.sess.subj];
+      document.getElementById('pomoSessionTitle').textContent = `${fmtDateVN(info.day.date)} (${info.sess.slot}) · ${subj.short}: ${info.sess.text}`;
+      document.getElementById('pomoCompleteLinked').classList.remove('hidden');
+      switchTab('tools');
+      showToast(`Đã nạp ca "${subj.short}" vào Pomodoro Reactor!`, subj.grad);
+    }
+
+    document.getElementById('pomoCompleteLinked').addEventListener('click', () => {
+      if (linkedSessionId && !checkedMap[linkedSessionId]) toggleSession(linkedSessionId);
+    });
+
+    document.querySelectorAll('.pomo-mode-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        clearInterval(pomoTimer); pomoTimer = null;
+        document.getElementById('miniTimerPill').classList.add('hidden');
+        document.getElementById('miniTimerPill').classList.remove('inline-flex');
+        const mins = parseInt(btn.dataset.pomo, 10);
+        pomoTotalSec = mins * 60; pomoLeftSec = pomoTotalSec;
+        document.getElementById('pomoStateTag').textContent = 'READY';
+        document.getElementById('pomoSubLabel').textContent = mins === 10 ? 'Nghỉ giải lao phục hồi não' : `Phiên học sâu ${mins} phút`;
+        document.querySelectorAll('.pomo-mode-btn').forEach(b => { b.classList.remove('chip-active'); b.classList.add('muted-txt'); });
+        btn.classList.add('chip-active'); btn.classList.remove('muted-txt');
+        updatePomoUI();
+      });
+    });
+
+    document.getElementById('pomoStart').addEventListener('click', () => {
+      if (pomoTimer) return;
+      document.getElementById('pomoStateTag').textContent = 'RUNNING';
+      const pill = document.getElementById('miniTimerPill');
+      pill.classList.remove('hidden'); pill.classList.add('inline-flex');
+      pomoTimer = setInterval(() => {
+        if (pomoLeftSec > 0) { pomoLeftSec--; updatePomoUI(); }
+        else {
+          clearInterval(pomoTimer); pomoTimer = null;
+          document.getElementById('pomoStateTag').textContent = 'COMPLETED';
+          playChime(); fireSparks();
+          showToast('Hết phiên Pomodoro! Nghỉ 10 phút nạp năng lượng ⚡', 'linear-gradient(135deg,#10b981,#06b6d4)');
+        }
+      }, 1000);
+    });
+    document.getElementById('pomoPause').addEventListener('click', () => { clearInterval(pomoTimer); pomoTimer = null; document.getElementById('pomoStateTag').textContent = 'PAUSED'; });
+    document.getElementById('pomoReset').addEventListener('click', () => {
+      clearInterval(pomoTimer); pomoTimer = null; pomoLeftSec = pomoTotalSec;
+      document.getElementById('pomoStateTag').textContent = 'READY';
+      document.getElementById('miniTimerPill').classList.add('hidden'); document.getElementById('miniTimerPill').classList.remove('inline-flex');
+      updatePomoUI();
+    });
+    document.getElementById('miniTimerPill').addEventListener('click', () => switchTab('tools'));
+
+    function switchTab(tab) {
+      currentTab = tab;
+      document.querySelectorAll('.tab-btn').forEach(b => {
+        const act = b.dataset.tab === tab;
+        b.classList.toggle('grad-btn', act);
+        b.classList.toggle('font-bold', act);
+        b.classList.toggle('muted-txt', !act);
+      });
+      ['pareto', 'schedule', 'calendar', 'exams', 'tools'].forEach(t => {
+        document.getElementById(`tab-${t}`).classList.toggle('hidden', t !== tab);
+      });
+      if (tab === 'pareto') renderParetoTab();
+      if (tab === 'calendar') renderCalendar();
+      if (tab === 'exams') renderExamsRadar();
+      if (tab === 'tools') renderGpaSimulator();
+    }
+
+    document.querySelectorAll('.tab-btn').forEach(b => b.addEventListener('click', () => switchTab(b.dataset.tab)));
+    document.getElementById('btnQuickFocus').addEventListener('click', () => switchTab('tools'));
+    document.getElementById('btnOpenPareto').addEventListener('click', () => switchTab('pareto'));
+
+    document.getElementById('btnJumpNextExam').addEventListener('click', () => {
+      const nextExamDay = SCHEDULE.find(d => d.sessions.some(s => s.isExam && !checkedMap[s.id]));
+      if (!nextExamDay) return;
+      filterPhase = 'all'; filterSubject = 'ALL'; onlyPending = false; onlyExams = false; onlyPareto = false; searchQuery = '';
+      document.getElementById('searchInput').value = '';
+      switchTab('schedule'); renderSubjectFilters(); renderSchedule();
+      setTimeout(() => { const el = document.getElementById(`day-${nextExamDay.date}`); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 60);
+    });
+
+    document.querySelectorAll('.phase-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterPhase = btn.dataset.phase;
+        document.querySelectorAll('.phase-btn').forEach(b => b.classList.remove('chip-active'));
+        btn.classList.add('chip-active'); renderSchedule();
+      });
+    });
+
+    document.querySelectorAll('.layout-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        layoutMode = btn.dataset.layout;
+        document.querySelectorAll('.layout-btn').forEach(b => {
+          b.classList.toggle('chip-active', b.dataset.layout === layoutMode);
+          b.classList.toggle('muted-txt', b.dataset.layout !== layoutMode);
+        });
+        renderSchedule();
+      });
+    });
+
+    document.getElementById('searchInput').addEventListener('input', e => { searchQuery = e.target.value; renderSchedule(); });
+    document.getElementById('toggleParetoOnlyBtn').addEventListener('click', e => {
+      onlyPareto = !onlyPareto;
+      e.currentTarget.classList.toggle('grad-pareto', onlyPareto);
+      e.currentTarget.classList.toggle('glass-sub', !onlyPareto);
+      renderSchedule();
+    });
+    document.getElementById('togglePendingBtn').addEventListener('click', e => { onlyPending = !onlyPending; e.currentTarget.classList.toggle('chip-active', onlyPending); renderSchedule(); });
+    document.getElementById('toggleExamsBtn').addEventListener('click', e => { onlyExams = !onlyExams; e.currentTarget.classList.toggle('chip-active', onlyExams); renderSchedule(); });
+
+    document.querySelectorAll('.month-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        activeMonth = btn.dataset.month;
+        document.querySelectorAll('.month-btn').forEach(b => {
+          const act = b.dataset.month === activeMonth;
+          b.classList.toggle('grad-btn', act); b.classList.toggle('glass-sub', !act);
+        });
+        const first = SCHEDULE.find(d => d.date.startsWith(activeMonth));
+        if (first) selectedCalDate = first.date;
+        renderCalendar();
+      });
+    });
+
+    document.querySelectorAll('.weight-preset').forEach(btn => {
+      btn.addEventListener('click', () => {
+        simWeights = btn.dataset.weights.split(',').map(Number);
+        document.querySelectorAll('.weight-preset').forEach(b => b.classList.remove('chip-active'));
+        btn.classList.add('chip-active'); renderGpaSimulator();
+      });
+    });
+
+    document.getElementById('btnResetProgress').addEventListener('click', () => {
+      if (confirm('Xóa toàn bộ tiến độ tick ca học & checklist 20/80?')) {
+        checkedMap = {}; paretoMap = {}; saveChecked(); savePareto(); updateAllViews();
+        showToast('Đã đặt lại toàn bộ tiến độ.', 'linear-gradient(135deg,#f59e0b,#ea580c)');
+      }
+    });
+
+    document.getElementById('btnExportIcs').addEventListener('click', () => {
+      const lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Orbital Study OS GPA 4.0//VN', 'CALSCALE:GREGORIAN'];
+      SCHEDULE.forEach(day => {
+        const ymd = day.date.replace(/-/g, '');
+        day.sessions.forEach(s => {
+          const m = s.time.match(/(\d{2}):(\d{2})–(\d{2}):(\d{2})/);
+          if (!m) return;
+          const subj = SUBJECTS[s.subj];
+          const prefix = s.isExam ? '[THI] ' : (s.core ? `[20/80 · ${subj.short}] ` : `[Ôn ${subj.short}] `);
+          lines.push('BEGIN:VEVENT');
+          lines.push(`UID:${s.id}@orbitalgpa40`);
+          lines.push(`DTSTART;TZID=Asia/Ho_Chi_Minh:${ymd}T${m[1]}${m[2]}00`);
+          lines.push(`DTEND;TZID=Asia/Ho_Chi_Minh:${ymd}T${m[3]}${m[4]}00`);
+          lines.push(`SUMMARY:${prefix}${s.text.replace(/[,;]/g, ' -')}`);
+          lines.push('END:VEVENT');
+        });
+      });
+      lines.push('END:VCALENDAR');
+      const blob = new Blob([lines.join('\r\n')], { type: 'text/calendar;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = 'orbital_gpa_4_0.ics'; a.click();
+      URL.revokeObjectURL(url);
+      showToast('Đã xuất orbital_gpa_4_0.ics — import vào Google/Apple Calendar nhé!', 'linear-gradient(135deg,#10b981,#06b6d4)');
+    });
+
+    window.addEventListener('keydown', e => {
+      if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
+      if (e.key === '/') { e.preventDefault(); switchTab('schedule'); document.getElementById('searchInput').focus(); }
+      else if (e.key === '1') switchTab('pareto');
+      else if (e.key === '2') switchTab('schedule');
+      else if (e.key === '3') switchTab('calendar');
+      else if (e.key === '4') switchTab('exams');
+      else if (e.key === '5') switchTab('tools');
+    });
+
+    function updateAllViews() {
+      renderHUD();
+      renderSubjectFilters();
+      renderSchedule();
+      if (currentTab === 'pareto') renderParetoTab();
+      if (currentTab === 'calendar') renderCalendar();
+      if (currentTab === 'exams') renderExamsRadar();
+    }
+
+    syncThemeBtn();
+    syncGradSwatches();
+    renderGpaSimulator();
+    updateAllViews();
+    updatePomoUI();
+  </script>
+</body>
+</html>
